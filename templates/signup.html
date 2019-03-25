@@ -1,0 +1,40 @@
+{% load static %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<!-- Add Custom CSS-->
+<link rel="stylesheet" type="text/css" href="{% static 'registerUser.css' %}">
+<link rel="shortcut icon" type="image/png" href="{% static '/images/blackbutton.png' %}">
+<body>
+           
+    <form method="post">
+        <div class=frame>
+            {% csrf_token %}
+            <div class='info'>
+                 <h2>Player Registration</h2>
+                 <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                {%for field in user_form %}
+                        {% if field.name == "first_name" or field.name == "last_name" or field.name == "username" %}
+                            <div class='nameFields'>
+                                <p>{{ field.label_tag }} {{ field }}</p>
+                            </div>    
+                        {% endif %}
+                {% endfor %}
+            </div>
+            <div class='fieldContainer'>
+                {{ formset.as_p }}
+                {% for field in user_form %}
+                    {% if field.name != 'username' and field.name  != 'first_name' and field.name != 'last_name' %}
+                        <div class="nameFields">
+                            <p>{{ field.label_tag }} {{ field }}</p>
+                        </div>
+                        {% for error in field.errors %}
+                            <p sytle = 'color: red'>{{ error }}</p>
+                        {% endfor %}
+                    {% endif %}                    
+                {% endfor %}
+            </div>
+        </div>
+        <div class='buttonHolder'>
+            <button type="submit">Register</button>
+        </div>
+    </form>
+</body>

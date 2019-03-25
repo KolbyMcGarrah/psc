@@ -1,0 +1,80 @@
+.frame{
+    max-width: 75vw;
+    margin:0 auto;
+}
+header {
+    border-bottom: 2px solid rgb(0,56,94);
+}
+.siteHeader{
+    font-size:50px;
+    text-align:center;
+}
+.option{
+    height: 300px;
+    width: 300px;
+    border-radius: 10px;
+    padding:50px;
+    color:white;
+    text-align:center;
+}
+.registerTournament {
+    background-color: rgb(213,213,213);
+    color:black;
+}
+.checkAccount {
+    background-color: rgb(0,54,96);
+    color: rgb(241,111,15);
+}
+.registerUser {
+    background-color: rgb(241,111,15);
+    color: rgb(0,56,94);
+}
+.optionContainer{
+    display:flex;
+    flex-shrink:0;
+    margin:0 auto;
+    justify-content:center;
+}
+.optionContainer a {
+    margin:20;
+}
+
+.iconStyling{
+    font-size:72;
+    text-align:center;
+    padding-bottom:30px;
+    margin-bottom:30px;
+}
+.registerUser div {
+    border-bottom: 2px solid rgb(0,56,94);
+}
+.checkAccount div {
+    border-bottom: 2px solid rgb(241,111,15);
+}
+.registerTournament div {
+    border-bottom: 2px solid rgb(0,0,0);
+}
+.registerTournament p{
+    color:black;
+    text-decoration:none;
+    text-align:center;
+    font-size:30px;
+}
+.checkAccount p {
+    color: rgb(241,111,15);
+    text-decoration: none;
+    text-align: center;
+    font-size: 30px;
+}
+.registerUser p {
+    color: rgb(0,56,94);
+    text-decoration: none;
+    text-align: center;
+    font-size: 30px;
+}
+a:hover{
+    text-decoration: none;
+}
+h1, .editButton{
+    display:inline;
+}

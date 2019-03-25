@@ -1,0 +1,85 @@
+{% load static %}
+<!-- Load Bootstrap-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="{% static 'proShop/shopHomeStyle.css' %}">
+<script src="{% static 'proShop/shopHomeJS.js' %}"></script>
+<h1>Welcome {{ user.username }}</h1>
+<div class="tab">
+        <button class="tablinks" onclick="openTab(event, 'profileInfo')">Profile Information</button>
+        <button class="tablinks" onclick="openTab(event, 'tournament')">Tournaments</button>
+        <button class="tablinks" onclick="openTab(event, 'account')">Account</button>
+        <button class="tablinks"><a href="{% url 'logout' %}">Log Out</a></button>
+</div>
+<div id="tournament" class="tabContent">
+        <button class="accordion" onclick="openAccordion('activeTourn')">Upcoming Tournaments</button>
+            <div id="activeTourn" class="panel">
+                <form method='post'> 
+                    {% csrf_token %}   
+                    <table>
+                        <thead>
+                            <th>Number</th>
+                            <th>Tournament Name</th>
+                            <th>Created On</th>
+                            <th>Start Date</th>
+                            <th>Remove</th>
+                            <th>Update</th>
+                        </thead>            
+                        <tbody>
+                            {% for tournament in upcomingTournaments %}
+                                <tr>     
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ tournament.tournament_name }}</td>
+                                    <td>{{ tournament.created_on }}</td>
+                                    <td>{{ tournament.start_date }}</td>
+                                    <td class='buttonCol'><button  type='submit' name='action' value="remove {{tournament.tournament_id}}"  class="btn btn-danger">Remove</button></td>
+                                    <td class='buttonCol'><button type='submit' name='action' value="update {{tournament.tournament_id}}" class = "btn btn-warning">Update</button></td>
+                                </tr>                    
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        <button class="accordion" onclick="openAccordion('tournHist')">Tournament History</button>
+            <div id="tournHist" class="panel">
+                    <table>
+                            <thead>
+                                <th>Number</th>
+                                <th>Tournament Name</th>
+                                <th>Created On</th>
+                                <th>Start Date</th>
+                                <th>View Details</th>
+                            </thead>            
+                            <tbody>
+                                {% for tournament in previousTournaments %}
+                                    <tr>     
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ tournament.tournament_name }}</td>
+                                        <td>{{ tournament.created_on }}</td>
+                                        <td>{{ tournament.start_date }}</td>
+                                        <td class='buttonCol'><button  type='submit' name='action' value="Remove"  class="btn btn-primary">View Results</button></td>
+                                    </tr>                    
+                                {% endfor %}
+                            </tbody>
+                        </table>
+            </div>
+</div>
+<div id="profileInfo" class="tabContent" >
+    {% for field in userInfo %}
+        <label>Username</label>
+        <p>{{ field.username }}</p>
+        <label>First Name</label>
+        <p>{{ field.first_name }}</p>
+        <label>Last Name</label>
+        <p>{{ field.last_name }}</p>
+        <label>Email</label>
+        <p>{{ field.email }}</p>
+        <label>address</label>
+        <p>{{ field.userPlayer.address }}</p>
+        <label>Home Course</label>
+        <p>{{ field.userPlayer.homeCourse }}</p>
+    {% endfor %}
+</div>
+
+<div id="account" class="tabContent">
+
+</div>

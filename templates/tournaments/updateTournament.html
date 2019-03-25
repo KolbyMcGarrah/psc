@@ -1,0 +1,119 @@
+{% load static %}
+<!-- Load Bootstrap-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="{% static 'tournament/update.css' %}">
+<div class='tournDetails'>
+    <h1>Tournament Details</h1>
+    {% for field in curTournament %}
+        <p>Tournament Name: {{ field.tournament_name }}</p>
+        <p>Tournament Created On: {{ field.created_on }}</p>
+        <p>Tournament Last Updated: {{ field.last_updated }}</p>
+        <p>Tournament Date: {{ field.tournament_date }}</p>
+    {% endfor %}
+    <button class='glyphicon glyphicon-edit editButton btn'>Edit</button>
+</div>
+    <h2>Tournament Roster</h2>
+    <form method='post'> 
+        <table>
+            <thead>
+                <th>Player Number</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Home Course</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Added On</th>
+                <th>Remove Player</th>
+            </thead>            
+            <tbody>
+                {% csrf_token %}
+                {% for player in tournamentPlayers %}
+                    <tr>     
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ player.player.user.first_name }}</td>
+                        <td>{{ player.player.user.last_name }}</td>
+                        <td>{{ player.player.homeCourse }}</td>
+                        <td>{{ player.player.user.email }}</td>
+                        <td>{{ player.player.user.phoneNumber }}</td>
+                        <td>{{ player.added_on }}</td>
+                        <td class='buttonCol'><button  type='submit' name='action' value="remove {{ player.player.user.id }}"  class="btn btn-danger">Remove</button></td>
+                    </tr>                    
+                {% endfor %}
+            </tbody>
+        </table>
+        {% if results %}
+            {% if results == "None" %}
+                <h2>Your search didn't return any results.</h2>
+                <p>Please check confirm spelling and capitalization were correct and try again or add a new player</p>
+            {% else %}
+                <h2>Players Matching Search Criteria</h2>
+                <table class='searchResults'>
+                    <thead>
+                            <th>Player Number</th>
+                            <th>Username</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Home Course</th>
+                            <th>Email</th>
+                            <th>Phone Number</th>
+                            <th>Add Player</th>
+                    </thead>
+                    <tbody>
+                        {% for player in results %}
+                            <tr>     
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ player.username }}</td>
+                                <td>{{ player.first_name }}</td>
+                                <td>{{ player.last_name }}</td>
+                                <td>{{ player.userPlayer.homeCourse }}</td>
+                                <td>{{ player.email }}</td>
+                                <td>{{ player.phoneNumber }}</td>
+                                <td class='buttonCol'><button  type='submit' name='action' value="addTo {{ player.id }}"  class="btn">Add Player to Tournament</button></td>
+                            </tr>                    
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        {% endif %}
+    </form>
+    {% if user_form %}
+        <form class='playerForm' method='post'>
+            {% csrf_token %}
+            <table class='formTable'>  
+                {% for field in user_form %}
+                <tr>
+                    <th>{{ field.label_tag }}</td> 
+                    <td>{{ field }}</td> 
+                </tr>       
+                {% endfor %}
+                {{ formset.as_table}}
+                <tr>
+                    <td></td>
+                    <td>
+                        <button class='savePlayer btn' type="submit" name = 'action' value = 'savePlayer'>Register</button>
+                    </td>
+                </tr>
+           </table>
+        </form> 
+    {% endif %}
+    {% if existingForm %}
+        <form class='playerForm' method='post'>
+            <h3>Search For a Player by First and Last name</h3>
+            {% csrf_token %}
+            <table class='formTable'>
+            {% for field in existingForm %}
+                <tr>
+                    <th>{{ field.label_tag }}</th>
+                    <td> {{ field }} </td>
+                </tr>
+            {% endfor %}    
+            </table>
+            <button class='findPlayer btn' type='submit' name='action' value='findPlayer'>Find Player</button>
+        </form>
+    {% endif %}
+    <form method = 'post'>{% csrf_token %}
+        <div class='buttonHolder'>
+            <button class='btn btn-primary' type='submit' name = "action" value='addPlayer'>Add New Player</button>
+            <button class='btn btn-success' type='submit' name = "action" value='addExisting'>Add Existing Player</button>
+        </div>
+    </form> 
