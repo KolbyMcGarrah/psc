@@ -18,6 +18,8 @@ class tournament (models.Model):
     active = models.BooleanField(default = True)
     def __str__(self):
         return self.tournament_name + ' ' + str(self.shop) + ' ' + str(self.tournament_id)
+    def getTournamentFromID(id):
+        return tournament.objects.filter(tournament_id = id)[0]
 
 class playerResults (models.Model): 
     tournament = models.ForeignKey(tournament, related_name = 'tournamentSet',on_delete=models.CASCADE)
@@ -27,5 +29,22 @@ class playerResults (models.Model):
     added_on = models.DateField(auto_now_add = True)
     class Meta:
         verbose_name_plural = 'playerResults'
+    
     def __str__(self):
         return str(self.tournament.shop) + ' ' + str(self.tournament.tournament_name) + str(self.tournament.tournament_id) + ' ' + str(self.player)
+    
+    def getTournamentPlayers(tourn):
+        return playerResults.objects.filter(tournament = tourn)
+
+    def setAmount(amount, curPlayer):
+        current = playerResults.objects.filter(player = curPlayer)[0]
+        current.amount_won = amount
+        current.save()
+    
+    def setPosition(pos, curPlayer):
+        current = playerResults.objects.filter(player = curPlayer)[0]
+        current.position = pos
+        current.save()
+    
+
+

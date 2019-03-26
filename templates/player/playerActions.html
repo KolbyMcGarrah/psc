@@ -2,6 +2,7 @@
 <!-- Load Bootstrap-->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="{% static 'proShop/shopHomeStyle.css' %}">
+<link rel="shortcut icon" type="image/png" href="{% static '/images/blackbutton.png' %}">
 <script src="{% static 'proShop/shopHomeJS.js' %}"></script>
 <h1>Welcome {{ user.username }}</h1>
 <div class="tab">
@@ -81,5 +82,11 @@
 </div>
 
 <div id="account" class="tabContent">
-
+    <h3>Current Balance</h3>
+    <tr>
+        <td>Credit Balance</td>
+        <td>{{ playerAccount.current_balance }}</td>
+    </tr>
+    <h3>Trade for Gift Cards</h3>
+    <h3>Transaction History</h3>
 </div>

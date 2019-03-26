@@ -1,0 +1,44 @@
+{% load static %}
+<!-- Load Bootstrap-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="{% static 'tournament/update.css' %}">
+<link rel="shortcut icon" type="image/png" href="{% static '/images/blackbutton.png' %}">
+<div class='tournDetails'>
+    <h1>Tournament Details</h1>
+        <p>Tournament Name: {{ curTournament.tournament_name }}</p>
+        <p>Tournament Created On: {{ curTournament.created_on }}</p>
+        <p>Tournament Last Updated: {{ curTournament.last_updated }}</p>
+        <p>Tournament Date: {{ curTournament.tournament_date }}</p>
+</div>
+    <h2>Tournament Roster</h2>
+    <form method='post'> 
+        <table>
+            <thead>
+                <th>Player Number</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Home Course</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Added On</th>
+                <th>Position</th>
+                <th>Amount Won</th>
+            </thead>            
+            <tbody>
+                {% csrf_token %}
+                {% for player in tournamentPlayers %}
+                    <tr>     
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ player.player.user.first_name }}</td>
+                        <td>{{ player.player.user.last_name }}</td>
+                        <td>{{ player.player.homeCourse }}</td>
+                        <td>{{ player.player.user.email }}</td>
+                        <td>{{ player.player.user.phoneNumber }}</td>
+                        <td>{{ player.added_on }}</td>
+                        <td>0.00</td>
+                        <td>0.00</td>
+                    </tr>                    
+                {% endfor %}
+            </tbody>
+        </table>
+    </form> 

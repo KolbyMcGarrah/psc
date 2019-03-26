@@ -149,4 +149,12 @@ def updateTournament(request, id):
             })
     else: 
         response = HttpResponse(status=403, reason='You are not Authorized to view this page')
-        return response  
+        return response 
+
+def tournamentResults(request, id):
+    curTournament = tournament.getTournamentFromID(id)
+    tournamentPlayers = playerResults.getTournamentPlayers(curTournament)
+    return render(request, 'tournaments/tournamentResults.html',{
+        "curTournament" : curTournament,
+        "tournamentPlayers" : tournamentPlayers,
+    })

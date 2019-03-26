@@ -68,6 +68,7 @@ def shopActions(request):
     activeTournaments = tournament.objects.filter(shop=request.user.userShop, active=True)
     expiredTournaments = tournament.objects.filter(shop=request.user.userShop, active=False)
     userInfo = CustomUser.objects.filter(id = request.user.id)
+    shopAccount = account.getAccount(request.user)
     if request.method == "POST":
         postAction = request.POST['action']
         if 'update' in postAction:
@@ -79,12 +80,14 @@ def shopActions(request):
             curTournament.active = False
             curTournament.save()
             return render(request, "proShop/shopActions.html", {
+                "shopAccount":shopAccount,
                 "activeTournaments":activeTournaments,
                 "expiredTournaments":expiredTournaments,
                 "userInfo":userInfo,
             })
     else:
         return render(request, "proShop/shopActions.html", {
+            "shopAccount":shopAccount,
             "activeTournaments":activeTournaments,
             "expiredTournaments":expiredTournaments,
             "userInfo":userInfo,
@@ -92,9 +95,11 @@ def shopActions(request):
 def playerActions(request):
     upcomingTournaments = tournament.objects.filter(players=request.user.userPlayer, active=True)
     previousTournaments = tournament.objects.filter(players=request.user.userPlayer, active=True)
+    playerAccount = account.getAccount(request.user)
     userInfo = CustomUser.objects.filter(id = request.user.id)
     return render(request, "player/playerActions.html",{
         "upcomingTournaments":upcomingTournaments, 
         "previousTournaments":previousTournaments,
         "userInfo":userInfo,
+        "playerAccount":playerAccount,
     })
