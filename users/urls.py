@@ -5,5 +5,6 @@ urlpatterns = [
     path('playerSignup/', views.playerRegistration, name='registerPlayer'),   
     path('registerShop/', views.registerShop, name = 'registerShop'),
     path('shopActions/', views.shopActions, name = 'shopActions'),
-    path('playerActions/', views.playerActions, name = 'playerActions') 
+    path('purchaseFunds/', views.purchaseFunds, name = 'purchaseFunds'),
+    path('playerActions/', views.playerActions, name = 'playerActions'), 
 ]

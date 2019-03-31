@@ -1,0 +1,9 @@
+{% load static %}
+<!-- Load Bootstrap-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="shortcut icon" type="image/png" href="{% static '/images/blackbutton.png' %}">
+<h1>Purchase Funds</h1>
+<form method='post'>
+    {% csrf_token %}
+    <button type = 'submit' class='btn button-warning'>Add Funds</button>
+</form>

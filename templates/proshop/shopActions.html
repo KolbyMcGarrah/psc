@@ -88,5 +88,25 @@
         <td>{{ shopAccount.current_balance }}</td>
     </tr>
     <h2>Buy Credits</h2>
+    <p><a href="{% url 'purchaseFunds' %}" class='btn'>Purchase Credits</a></p>
     <h2>Transactions</h2>
+    <h3>Credits Recieved</h3>
+    <table>
+            <thead>
+                <th>Number</th>
+                <th>Amount</th>
+                <th>Transaction Reason</th>
+                <th>Transaction Date</th>
+            </thead>            
+            <tbody>
+                {% for field in creditsRecieved %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ field.amount }}</td>
+                    <td>{{ field.transaction_reason }}</td>
+                    <td>{{ field.transaction_date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 </div>

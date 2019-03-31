@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from .forms import userForm, shopCreationForm
 from .models import CustomUser, proShop, player
 from tournament.models import *
-from accounts.models import account
+from accounts.models import account, transaction
 from django.forms import inlineformset_factory
 import re
 
@@ -69,6 +69,8 @@ def shopActions(request):
     expiredTournaments = tournament.objects.filter(shop=request.user.userShop, active=False)
     userInfo = CustomUser.objects.filter(id = request.user.id)
     shopAccount = account.getAccount(request.user)
+    creditsRecieved = transaction.getRecievedTransactions(shopAccount)
+    creditsSpent = transaction.getPayedTransactions(shopAccount)
     if request.method == "POST":
         postAction = request.POST['action']
         if 'update' in postAction:
@@ -85,9 +87,13 @@ def shopActions(request):
                 "expiredTournaments":expiredTournaments,
                 "userInfo":userInfo,
             })
+        elif 'purchase':
+            return render(request, "proShop/purchaseFunds.html")
     else:
         return render(request, "proShop/shopActions.html", {
             "shopAccount":shopAccount,
+            "creditsRecieved":creditsRecieved,
+            "creditsSpent":creditsSpent,
             "activeTournaments":activeTournaments,
             "expiredTournaments":expiredTournaments,
             "userInfo":userInfo,
@@ -103,3 +109,11 @@ def playerActions(request):
         "userInfo":userInfo,
         "playerAccount":playerAccount,
     })
+
+def purchaseFunds(request):
+    curShop = request.user
+    if request.method == "POST":
+        account.addShopFunds(curShop, 300)
+        return render(request, "proShop/purchaseFunds.html")
+    else: 
+        return render(request, "proShop/purchaseFunds.html")
