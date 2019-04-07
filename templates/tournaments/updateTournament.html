@@ -116,5 +116,8 @@
         <div class='buttonHolder'>
             <button class='btn btn-primary' type='submit' name = "action" value='addPlayer'>Add New Player</button>
             <button class='btn btn-success' type='submit' name = "action" value='addExisting'>Add Existing Player</button>
+            {% for tourn in curTournament %}
+                <button type='submit' name='action' value="finalize {{tourn.tournament_id}}" class = "btn btn-warning">finalize</button>
+            {% endfor %}
         </div>
     </form> 

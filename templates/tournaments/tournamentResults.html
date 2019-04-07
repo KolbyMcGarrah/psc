@@ -26,19 +26,21 @@
             </thead>            
             <tbody>
                 {% csrf_token %}
-                {% for player in tournamentPlayers %}
-                    <tr>     
+                {{ Formset.management_form }}
+                {% for form in forms %}    
+                    <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td>{{ player.player.user.first_name }}</td>
-                        <td>{{ player.player.user.last_name }}</td>
-                        <td>{{ player.player.homeCourse }}</td>
-                        <td>{{ player.player.user.email }}</td>
-                        <td>{{ player.player.user.phoneNumber }}</td>
-                        <td>{{ player.added_on }}</td>
-                        <td>0.00</td>
-                        <td>0.00</td>
-                    </tr>                    
-                {% endfor %}
+                        <td>{{ form.info.player.user.first_name }}</td>
+                        <td>{{ form.info.player.user.last_name }}</td>
+                        <td>{{ form.info.player.homeCourse }}</td>
+                        <td>{{ form.info.player.user.email }}</td>
+                        <td>{{ form.info.player.user.phoneNumber }}</td>
+                        <td>{{ form.info.added_on }}</td>
+                        <td>{{ form.form.position }}</td>
+                        <td>{{ form.form.amount_won }}</td>
+                    </tr> 
+                {% endfor %}   
             </tbody>
         </table>
-    </form> 
+        <button type='submit' class='btn btn-success'>Submit Results</button>
+    </form>

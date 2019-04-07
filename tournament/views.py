@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic
 from django.http import HttpResponseRedirect, HttpResponse
-from django.forms import inlineformset_factory
+from django.forms import inlineformset_factory, formset_factory, modelformset_factory
 from .models import tournament, playerResults
-from .forms import tournamentForm, existingPlayer
+from .forms import tournamentForm, existingPlayer, playerResultForm
+from accounts.models import account, transaction
 from users.models import player, CustomUser, proShop
 from users.forms import playerCreationForm, userForm
 import re 
@@ -68,6 +69,8 @@ def updateTournament(request, id):
                         created_user.save()
                         print(created_user)
                         formset.save()
+                        playerAccount = account.createPlayerAccount(created_user)
+                        playerAccount.save()
                         tournyPlayer = playerResults() 
                         tournyPlayer.tournament = curTournament[0]
                         tournyPlayer.player = created_user.userPlayer
@@ -137,6 +140,9 @@ def updateTournament(request, id):
                             'curTournament' : curTournament,
                             'tournamentPlayers': tournamentPlayers,
                         })
+            if 'finalize' in postAction:
+                tournamentID = re.match(r"finalize\s(\d+)", postAction)
+                return redirect('tournamentResults', id=tournamentID.group(1))
             else:
                 response = HttpResponse(status=500 , reason='This didnt work')
                 return response  
@@ -154,7 +160,27 @@ def updateTournament(request, id):
 def tournamentResults(request, id):
     curTournament = tournament.getTournamentFromID(id)
     tournamentPlayers = playerResults.getTournamentPlayers(curTournament)
-    return render(request, 'tournaments/tournamentResults.html',{
-        "curTournament" : curTournament,
-        "tournamentPlayers" : tournamentPlayers,
-    })
+    resultsForm = modelformset_factory(model=playerResults,form=playerResultForm, extra=0)
+    resultsFormSet = resultsForm(queryset=playerResults.getTournamentPlayers(curTournament))
+    zipped = []
+    count = 0
+    for form in resultsFormSet: 
+        zipped.append({"form":form, "info":tournamentPlayers[count]})
+        count+=1
+    if request.method == "POST":
+        resultsFormSet = resultsForm(request.POST)
+        instances = resultsFormSet.save()
+        print(instances)
+        return render(request, 'tournaments/tournamentResults.html',{
+            "Formset":resultsFormSet,
+            "curTournament" : curTournament,
+            "tournamentPlayers" : tournamentPlayers,
+            "forms":zipped,
+        })
+    else:
+        return render(request, 'tournaments/tournamentResults.html',{
+            "Formset":resultsFormSet,
+            "curTournament" : curTournament,
+            "tournamentPlayers" : tournamentPlayers,
+            "forms":zipped,
+        })
