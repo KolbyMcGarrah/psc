@@ -1,0 +1,33 @@
+{% load static %}
+<!-- Load Bootstrap-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="{% static 'tournament/confirm.css' %}">
+<link rel="shortcut icon" type="image/png" href="{% static '/images/blackbutton.png' %}">
+<h1>Please confirm the following results</h1>
+<table >
+    <thead>
+            <th>Player Number</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Position</th>
+            <th>Amount Won</th>
+    </thead>
+    {% for player in tournamentPlayers %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ player.player.user.first_name }}</td>
+            <td>{{ player.player.user.last_name }}</td>
+            <td>{{ player.player.user.email }}</td>
+            <td>{{ player.player.user.phoneNumber }}</td>
+            <td>{{ player.position }}</td>
+            <td>{{ player.amount_won }}</td> 
+        </tr>
+    {% endfor %}
+</table>
+<form method='post'>
+    {% csrf_token %}
+    <button type='submit' class='btn btn-success' name='action' value='confirm'>Confirm</button>
+    <button type='submit' class='btn btn-warning' name='action' value='edit'>Edit Results</button>
+</form>

@@ -4,7 +4,7 @@ from django.views import generic
 from django.http import HttpResponseRedirect, HttpResponse
 from django.forms import inlineformset_factory, formset_factory, modelformset_factory
 from .models import tournament, playerResults
-from .forms import tournamentForm, existingPlayer, playerResultForm
+from .forms import tournamentForm, existingPlayer, playerResultFormSet
 from accounts.models import account, transaction
 from users.models import player, CustomUser, proShop
 from users.forms import playerCreationForm, userForm
@@ -20,9 +20,12 @@ def registerTournament(request):
             if form.is_valid():
                 curTournament.tournament_name = form.cleaned_data['tournament_name']
                 curTournament.tournament_date = form.cleaned_data['tournament_date']
+                curTournament.prize_pool = form.cleaned_data['prize_pool']
                 curTournament.save() 
                 id = curTournament.tournament_id
                 return redirect('updateTournament', id=id)
+            else:
+                print(form.errors)
         else: 
             newTourny = tournamentForm()
             return render(request, "tournaments/registerTournament.html", {
@@ -33,14 +36,14 @@ def registerTournament(request):
         return response
 
 def updateTournament(request, id):
-    curTournament = tournament.objects.filter(tournament_id = id) #grab the current tournament 
+    curTournament = tournament.getTournamentFromID(id) #grab the current tournament 
     userAuth = request.user.is_authenticated #set True if user is authenticated
     curShop = request.user.userShop #get Shop name
     userType = request.user.userType #get user type
     playerInlineFormSet = inlineformset_factory(CustomUser, player, fields = ('address','homeCourse'),can_delete=False) #add player form
      #User is authenticated, they are a shop user and they are the shop related to the current tournament 
-    tournamentPlayers = playerResults.objects.filter(tournament = curTournament[0])
-    if userType == 3 and curShop == curTournament[0].shop and userAuth:        
+    tournamentPlayers = playerResults.objects.filter(tournament = curTournament)
+    if userType == 3 and curShop == curTournament.shop and userAuth and curTournament.status==1:        
         if request.method == "POST":
             print('Posting')
             postAction = request.POST['action']
@@ -67,15 +70,13 @@ def updateTournament(request, id):
                     if formset.is_valid():
                         created_user.userType=2
                         created_user.save()
-                        print(created_user)
                         formset.save()
                         playerAccount = account.createPlayerAccount(created_user)
                         playerAccount.save()
                         tournyPlayer = playerResults() 
-                        tournyPlayer.tournament = curTournament[0]
+                        tournyPlayer.tournament = curTournament
                         tournyPlayer.player = created_user.userPlayer
                         tournyPlayer.save()
-                        print(tournyPlayer)
                         user_form = False
                         formset = False
                         return render(request, 'tournaments/updateTournament.html',{
@@ -84,8 +85,10 @@ def updateTournament(request, id):
                             "formset": formset,
                             'tournamentPlayers': tournamentPlayers,
                         })
-                    else: 
+                    else:
+                        print(formset.errors)
                         response = HttpResponse(status=500 , reason='This didnt work')
+                        print 
                         return response
 
             elif 'remove' in postAction:
@@ -126,10 +129,10 @@ def updateTournament(request, id):
                 print(playerID.group(1))
                 newPlayer = player.objects.filter(user = playerID.group(1))
                 print('adding player: ', newPlayer)
-                checkUnique = playerResults.objects.filter(tournament=curTournament[0], player=newPlayer[0])
+                checkUnique = playerResults.objects.filter(tournament=curTournament, player=newPlayer[0])
                 if not checkUnique:
                     addedPlayer = playerResults()
-                    addedPlayer.tournament = curTournament[0]
+                    addedPlayer.tournament = curTournament
                     addedPlayer.player = newPlayer[0]
                     addedPlayer.save()
                 else:
@@ -142,6 +145,8 @@ def updateTournament(request, id):
                         })
             if 'finalize' in postAction:
                 tournamentID = re.match(r"finalize\s(\d+)", postAction)
+                curTournament.status = 3
+                curTournament.save()
                 return redirect('tournamentResults', id=tournamentID.group(1))
             else:
                 response = HttpResponse(status=500 , reason='This didnt work')
@@ -153,6 +158,8 @@ def updateTournament(request, id):
                 'curTournament' : curTournament,
                 'tournamentPlayers': tournamentPlayers,
             })
+    elif curTournament.status == 3:
+        return redirect('tournamentResults', id=curTournament.tournament_id)
     else: 
         response = HttpResponse(status=403, reason='You are not Authorized to view this page')
         return response 
@@ -160,27 +167,100 @@ def updateTournament(request, id):
 def tournamentResults(request, id):
     curTournament = tournament.getTournamentFromID(id)
     tournamentPlayers = playerResults.getTournamentPlayers(curTournament)
-    resultsForm = modelformset_factory(model=playerResults,form=playerResultForm, extra=0)
-    resultsFormSet = resultsForm(queryset=playerResults.getTournamentPlayers(curTournament))
-    zipped = []
-    count = 0
-    for form in resultsFormSet: 
-        zipped.append({"form":form, "info":tournamentPlayers[count]})
-        count+=1
     if request.method == "POST":
-        resultsFormSet = resultsForm(request.POST)
-        instances = resultsFormSet.save()
-        print(instances)
-        return render(request, 'tournaments/tournamentResults.html',{
-            "Formset":resultsFormSet,
-            "curTournament" : curTournament,
-            "tournamentPlayers" : tournamentPlayers,
-            "forms":zipped,
-        })
+        formSet=playerResultFormSet(request.POST,request.FILES)
+        totalAmount = 0.00
+        for form in formSet:
+            if form.is_valid():
+                curAmount = float(form.cleaned_data['amount_won'])
+                totalAmount += curAmount
+                form.save()
+        print(totalAmount)
+        getNextPage = tournament.balanceWinnings(curTournament,totalAmount)
+        if getNextPage == "Exact":
+            return redirect('finalizeResults', id=curTournament.tournament_id)
+        elif getNextPage == "Over":
+            return redirect('fundsOver', id=curTournament.tournament_id)
+        else: 
+            return redirect('fundsUnder', id=curTournament.tournament_id)
     else:
+        formSet = playerResultFormSet(queryset=tournamentPlayers)
         return render(request, 'tournaments/tournamentResults.html',{
-            "Formset":resultsFormSet,
             "curTournament" : curTournament,
             "tournamentPlayers" : tournamentPlayers,
-            "forms":zipped,
+            "forms":formSet,
         })
+
+def finalizeResults(request, id):
+    curTournament = tournament.getTournamentFromID(id)
+    tournamentPlayers = playerResults.objects.filter(tournament=curTournament)
+    tournamentWinners = []
+    for field in tournamentPlayers:
+        if field.amount_won > 0: 
+            tournamentWinners.append(field)
+    if request.method == "POST": 
+        action = request.POST['action']
+        if action == 'confirm':
+            if tournament.finalizeTournament(tournamentWinners,curTournament) == 'Success':
+                return redirect('Success')
+            else:
+                return redirect('insufficientCredits',curTournament.tournament_id)
+        else:
+            return redirect('tournamentResults',id)
+    else:
+        return render(request, 'tournaments/finalizeResults.html', {
+            "curTournament": curTournament, 
+            "tournamentPlayers": tournamentWinners,
+        })
+def fundsUnder(request,id):
+    curTournament= tournament.getTournamentFromID(id)
+    tournamentPlayers = playerResults.objects.filter(tournament=curTournament)
+    totalAmount = 0.00
+    for play in tournamentPlayers:
+        totalAmount += float(play.amount_won)
+    difference = float(curTournament.prize_pool) - totalAmount
+    if request.method == "POST":
+        if 'confirm' in request.POST['action']:            
+            buttonID = re.match(r"confirm\s(\d+)", request.POST['action'])
+            curTournament.prize_pool = totalAmount
+            curTournament.save()
+            return redirect('finalizeResults',buttonID.group(1))
+        else:
+            buttonID = re.match(r"adjust\s(\d+)", request.POST['action'])
+            return redirect('updateTournament',buttonID.group(1))
+    else:
+        return render(request, 'tournaments/fundsUnder.html',{
+            'curTournament':curTournament,
+            'difference':difference,
+        })
+def fundsOver(request,id):
+    curTournament= tournament.getTournamentFromID(id)
+    tournamentPlayers = playerResults.objects.filter(tournament=curTournament)
+    totalAmount = 0.00
+    for play in tournamentPlayers:
+        totalAmount += float(play.amount_won)
+    difference = totalAmount - float(curTournament.prize_pool)
+    if request.method == "POST":
+        if request.POST['action'] == 'confirm':
+            curTournament.prize_pool = totalAmount
+            curTournament.save()
+            return redirect('finalizeResults',id)
+        else:
+            buttonID = re.match(r"adjust\s(\d+)", request.POST['action'])
+            return redirect('updateTournament',buttonID.group(1))
+    else:
+        return render(request, 'tournaments/fundsOver.html',{
+            'curTournament':curTournament,
+            'difference':difference,
+        })
+
+def Success(request):
+    return render(request, "tournaments/Success.html")
+
+def insufficientCredits(request,id):
+    curTournament=tournament.getTournamentFromID(id)
+    userAccount = account.getAccount(request.user)
+    difference = curTournament.prize_pool - userAccount.current_balance
+    return render(request, "tournaments/insufficientCredits.html",{
+        "difference":difference,
+    })

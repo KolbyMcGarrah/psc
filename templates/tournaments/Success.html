@@ -1,20 +1,17 @@
 {% load static %}
 <!-- Load Bootstrap-->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="{% static 'proShop/funds.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'tournament/success.css' %}">
 <link rel="shortcut icon" type="image/png" href="{% static '/images/blackbutton.png' %}">
 <div id="myModal" class="modal">
     <!-- Modal content -->
         <div class="modal-content">
             <div class="modal-header">
-            <h2>Purchase Credits</h2>
+                    <h1>Success!</h1>
             </div>
             <div class="modal-body">
-                <form method='POST'>
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <button class='btn btn-success' type='submit' name='action' value'purchase'>Confirm</button>
-                </form>
+                <h3>Credits have been moved from your account. You can find the transaction history on your home page.</h3>
+                <a class='btn btn-success' href='{% url 'home' %}'>Return Home</a>
             </div>
         </div>
 </div>

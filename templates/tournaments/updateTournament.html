@@ -5,12 +5,11 @@
 <link rel="shortcut icon" type="image/png" href="{% static '/images/blackbutton.png' %}">
 <div class='tournDetails'>
     <h1>Tournament Details</h1>
-    {% for field in curTournament %}
-        <p>Tournament Name: {{ field.tournament_name }}</p>
-        <p>Tournament Created On: {{ field.created_on }}</p>
-        <p>Tournament Last Updated: {{ field.last_updated }}</p>
-        <p>Tournament Date: {{ field.tournament_date }}</p>
-    {% endfor %}
+        <p>Tournament Name: {{ curTournament.tournament_name }}</p>
+        <p>Tournament Created On: {{ curTournament.created_on }}</p>
+        <p>Tournament Last Updated: {{ curTournament.last_updated }}</p>
+        <p>Tournament Date: {{ curTournament.tournament_date }}</p>
+        <p>Tournament Prize Pool: {{ curTournament.prize_pool }}</p>
     <button class='glyphicon glyphicon-edit editButton btn'>Edit</button>
 </div>
     <h2>Tournament Roster</h2>
@@ -116,8 +115,6 @@
         <div class='buttonHolder'>
             <button class='btn btn-primary' type='submit' name = "action" value='addPlayer'>Add New Player</button>
             <button class='btn btn-success' type='submit' name = "action" value='addExisting'>Add Existing Player</button>
-            {% for tourn in curTournament %}
-                <button type='submit' name='action' value="finalize {{tourn.tournament_id}}" class = "btn btn-warning">finalize</button>
-            {% endfor %}
+            <button type='submit' name='action' value="finalize {{curTournament.tournament_id}}" class = "btn btn-warning">Finalize</button>
         </div>
     </form> 

@@ -14,6 +14,6 @@ class HomePageView(View):
             elif userType['userType'] == 3:
                 return redirect('users/shopActions')
             else:
-                return render('home.html')
+                return render(request,'home.html')
         else:
             return render(request,'home.html')

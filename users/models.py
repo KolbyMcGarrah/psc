@@ -15,9 +15,13 @@ class CustomUser(AbstractUser):
     phoneNumber = models.CharField(max_length = 10, null=True)
 
 class player (models.Model):
+    #golf_level_choices = ((1,'pro'), (2,'amature'))
     user = models.OneToOneField(CustomUser, related_name='userPlayer', on_delete=models.CASCADE, primary_key = True)
     address = models.CharField(max_length = 50)
     homeCourse = models.CharField(max_length = 50)
+    #golf_level = models.PositiveSmallIntegerField(
+    #               choices=golf_level_choices
+    #               default=2)
     insrt_timestamp = models.DateField(auto_now_add = True)
     chnge_timestamp = models.DateField(auto_now = True)
     def __str__(self):

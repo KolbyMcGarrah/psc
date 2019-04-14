@@ -1,0 +1,25 @@
+
+{% load static %}
+<!-- Load Bootstrap-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="{% static 'tournament/fundsUnder.css' %}">
+<link rel="shortcut icon" type="image/png" href="{% static '/images/blackbutton.png' %}">
+<div id="myModal" class="modal">
+    <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Left Over Credits</h2>
+            </div>
+            <div class="modal-body">
+                <form method='POST'>
+                    {% csrf_token %}
+                    <h3>The amount of credits being distributed is less than the tournament prize pool.</h3>
+                    <h4>There will be {{ difference }} credits left over from this tournament.</h4>
+                    <h4>Please either adjust the tournament winnings, or confirm to continue and save these additional credits.</h4>
+                    <h4>Clicking confirm will update the tournament pool to reflect the new amount.</h4>
+                    <button class='btn btn-warning' type='submit' name='action' value='confirm {{ curTournament.tournament_id }}'>Confirm</button>
+                    <button class='btn btn-success' type='submit' name='action' value='adjust {{ curTournament.tournament_id }}'>Adjust Winnings</button>
+                </form>
+            </div>
+        </div>
+</div>

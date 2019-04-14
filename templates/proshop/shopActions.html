@@ -31,15 +31,18 @@
                                     <td>{{ forloop.counter }}</td>
                                     <td>{{ tournament.tournament_name }}</td>
                                     <td>{{ tournament.created_on }}</td>
-                                    <td>{{ tournament.start_date }}</td>
-                                    <td class='buttonCol'><button  type='submit' name='action' value="remove {{tournament.tournament_id}}"  class="btn btn-danger">Remove</button></td>
+                                    <td>{{ tournament.tournament_date }}</td>                                    
+                                    {% if tournament.status == 1 %}
+                                        <td class='buttonCol'><button  type='submit' name='action' value="remove {{tournament.tournament_id}}"  class="btn btn-danger">Remove</button></td>
+                                    {% else %}
+                                        <td>N/A</td>
+                                    {% endif %}
                                     <td class='buttonCol'><button type='submit' name='action' value="update {{tournament.tournament_id}}" class = "btn btn-warning">Update</button></td>
                                 </tr>                    
                             {% endfor %}
                         </tbody>
                     </table>
                 </form>
-                <p><a href="{% url 'registerTournament' %}" class='btn'>Register A Tournament</a></p>
             </div>
         <button class="accordion" onclick="openAccordion('tournHist')">Tournament History</button>
             <div id="tournHist" class="panel">
@@ -57,13 +60,14 @@
                                         <td>{{ forloop.counter }}</td>
                                         <td>{{ tournament.tournament_name }}</td>
                                         <td>{{ tournament.created_on }}</td>
-                                        <td>{{ tournament.start_date }}</td>
+                                        <td>{{ tournament.tournament_date }}</td>
                                         <td class='buttonCol'><button  type='submit' name='action' value="Remove"  class="btn btn-primary">View</button></td>
                                     </tr>                    
                                 {% endfor %}
                             </tbody>
                         </table>
             </div>
+            <p class='but'><a href="{% url 'registerTournament' %}" class='btn btn-success'>Register A Tournament</a></p>
 </div>
 <div id="profileInfo" class="tabContent" >
     {% for field in userInfo %}
@@ -83,15 +87,14 @@
 </div>
 
 <div id="account" class="tabContent">
-    <tr>
-        <td>Current Credit Balance</td>
-        <td>{{ shopAccount.current_balance }}</td>
-    </tr>
-    <h2>Buy Credits</h2>
-    <p><a href="{% url 'purchaseFunds' %}" class='btn'>Purchase Credits</a></p>
-    <h2>Transactions</h2>
-    <h3>Credits Recieved</h3>
-    <table>
+    <button class="accordion" onclick="openAccordion('Balance')">Current Balance</button>
+    <div id='Balance' class='panel'>
+            <h4>Current Credit Balance : {{ shopAccount.current_balance }} </h4>
+            <p><a href="{% url 'purchaseFunds' %}" class='btn btn-success'>Purchase Credits</a></p>
+    </div>
+    <button class="accordion" onclick="openAccordion('credRec')">Credits Recieved</button>
+    <div id='credRec' class='panel'>
+        <table>
             <thead>
                 <th>Number</th>
                 <th>Amount</th>
@@ -109,4 +112,26 @@
                 {% endfor %}
             </tbody>
         </table>
+    </div> 
+    <button class="accordion" onclick="openAccordion('credSpen')">Credits Spent</button>
+    <div id='credSpen' class='panel'>
+        <table>
+            <thead>
+                <th>Number</th>
+                <th>Amount</th>
+                <th>Transaction Reason</th>
+                <th>Transaction Date</th>
+            </thead>            
+            <tbody>
+                {% for field in creditsSpent %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ field.amount }}</td>
+                    <td>{{ field.transaction_reason }}</td>
+                    <td>{{ field.transaction_date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>

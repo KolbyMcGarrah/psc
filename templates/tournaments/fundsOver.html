@@ -1,0 +1,23 @@
+{% load static %}
+<!-- Load Bootstrap-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="{% static 'tournament/fundsUnder.css' %}">
+<link rel="shortcut icon" type="image/png" href="{% static '/images/blackbutton.png' %}">
+<div id="myModal" class="modal">
+    <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Not Enough Funds</h2>
+            </div>
+            <div class="modal-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <h3>An additional {{ difference }} credits are needed to pay the total amount of prize money.</h3>
+                    <h4>Please confirm to update the prize pool to the new amount or re-adjust the tournament winnings.</h4>
+                    <h4>Selecting purchase additional funds will update the tournament prize pool.</h4>
+                    <button class='btn btn-success' type='submit' name='action' value='confirm'>Confirm New Amount</button>
+                    <button class='btn btn-warning' type='submit' name='action' value='adjust {{ curTournament.tournament_id }}'>Adjust Winnings</button>
+                </form>
+            </div>
+        </div>
+</div>

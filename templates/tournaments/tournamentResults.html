@@ -1,7 +1,7 @@
 {% load static %}
 <!-- Load Bootstrap-->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="{% static 'tournament/update.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'tournament/confirm.css' %}">
 <link rel="shortcut icon" type="image/png" href="{% static '/images/blackbutton.png' %}">
 <div class='tournDetails'>
     <h1>Tournament Details</h1>
@@ -9,38 +9,54 @@
         <p>Tournament Created On: {{ curTournament.created_on }}</p>
         <p>Tournament Last Updated: {{ curTournament.last_updated }}</p>
         <p>Tournament Date: {{ curTournament.tournament_date }}</p>
+        <p>Tournament Prize Pool: {{ curTournament.prize_pool }}</p>
 </div>
-    <h2>Tournament Roster</h2>
     <form method='post'> 
-        <table>
-            <thead>
-                <th>Player Number</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Home Course</th>
-                <th>Email</th>
-                <th>Phone Number</th>
-                <th>Added On</th>
-                <th>Position</th>
-                <th>Amount Won</th>
-            </thead>            
-            <tbody>
-                {% csrf_token %}
-                {{ Formset.management_form }}
-                {% for form in forms %}    
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ form.info.player.user.first_name }}</td>
-                        <td>{{ form.info.player.user.last_name }}</td>
-                        <td>{{ form.info.player.homeCourse }}</td>
-                        <td>{{ form.info.player.user.email }}</td>
-                        <td>{{ form.info.player.user.phoneNumber }}</td>
-                        <td>{{ form.info.added_on }}</td>
-                        <td>{{ form.form.position }}</td>
-                        <td>{{ form.form.amount_won }}</td>
-                    </tr> 
-                {% endfor %}   
-            </tbody>
-        </table>
+            <table>         
+                <thead class='headerClass'>
+                    <th colspan="3" class='headerClass'>Tournament Roster</th>
+                </thead>                
+                <tbody>
+                    <td class='innerTable'>
+                        <table >
+                            <thead>
+                                    <th>Player Number</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                    <th>Phone Number</th>
+                            </thead>
+                            {% for player in tournamentPlayers %}
+                            <tr class='rowData'>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ player.player.user.first_name }}</td>
+                                <td>{{ player.player.user.last_name }}</td>
+                                <td>{{ player.player.user.email }}</td>
+                                <td>{{ player.player.user.phoneNumber }}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </td>
+                    <td class='innerTable'>
+                        <table class="formTable">
+                            <thead>
+                                <th>Position</th>
+                                <th>Amount Won</th>
+                                <th>Flight</th>
+                            </thead>
+                            {% csrf_token %}
+                            {{ forms.management_form }}
+                            {% for form in forms %}
+                            <tr class='rowData'>
+                                <td>{{ form.position }}</td>
+                                <td>{{ form.amount_won }}</td>
+                                <td>{{ form.flight }}</td>
+                            </tr> 
+                            {{ form.id }}
+                            {% endfor %}
+                        </table>
+                    </td>  
+                </tbody>
+            </table>
         <button type='submit' class='btn btn-success'>Submit Results</button>
     </form>

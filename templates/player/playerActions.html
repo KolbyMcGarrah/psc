@@ -22,8 +22,7 @@
                             <th>Tournament Name</th>
                             <th>Created On</th>
                             <th>Start Date</th>
-                            <th>Remove</th>
-                            <th>Update</th>
+                            <th>Drop Out</th>
                         </thead>            
                         <tbody>
                             {% for tournament in upcomingTournaments %}
@@ -31,9 +30,8 @@
                                     <td>{{ forloop.counter }}</td>
                                     <td>{{ tournament.tournament_name }}</td>
                                     <td>{{ tournament.created_on }}</td>
-                                    <td>{{ tournament.start_date }}</td>
-                                    <td class='buttonCol'><button  type='submit' name='action' value="remove {{tournament.tournament_id}}"  class="btn btn-danger">Remove</button></td>
-                                    <td class='buttonCol'><button type='submit' name='action' value="update {{tournament.tournament_id}}" class = "btn btn-warning">Update</button></td>
+                                    <td>{{ tournament.tournament_date }}</td>
+                                    <td class='buttonCol'><button  type='submit' name='action' value="remove {{tournament.tournament_id}}"  class="btn btn-danger">Drop</button></td>
                                 </tr>                    
                             {% endfor %}
                         </tbody>
@@ -46,18 +44,18 @@
                             <thead>
                                 <th>Number</th>
                                 <th>Tournament Name</th>
-                                <th>Created On</th>
                                 <th>Start Date</th>
-                                <th>View Details</th>
+                                <th>Final Place</th>
+                                <th>Amount Won</th>
                             </thead>            
                             <tbody>
                                 {% for tournament in previousTournaments %}
                                     <tr>     
                                         <td>{{ forloop.counter }}</td>
-                                        <td>{{ tournament.tournament_name }}</td>
-                                        <td>{{ tournament.created_on }}</td>
-                                        <td>{{ tournament.start_date }}</td>
-                                        <td class='buttonCol'><button  type='submit' name='action' value="Remove"  class="btn btn-primary">View Results</button></td>
+                                        <td>{{ tournament.tournament.tournament_name }}</td>
+                                        <td>{{ tournament.tournament.tournament_date }}</td>
+                                        <td>{{ tournament.position }}</td>
+                                        <td>{{ tournament.amount_won }}</td>
                                     </tr>                    
                                 {% endfor %}
                             </tbody>
@@ -82,11 +80,55 @@
 </div>
 
 <div id="account" class="tabContent">
-    <h3>Current Balance</h3>
-    <tr>
-        <td>Credit Balance</td>
-        <td>{{ playerAccount.current_balance }}</td>
-    </tr>
-    <h3>Trade for Gift Cards</h3>
-    <h3>Transaction History</h3>
+    <button class="accordion" onclick="openAccordion('Balance')">Current Balance</button>
+    <div id='Balance' class='panel'>
+            <h4>Current Credit Balance : {{ playerAccount.current_balance }}</h4>
+    </div>
+    <button class="accordion" onclick="openAccordion('credRec')">Credits Recieved</button>
+    <div id='credRec' class='panel'>
+        <table>
+            <thead>
+                <th>Number</th>
+                <th>Amount</th>
+                <th>Transaction Reason</th>
+                <th>Transaction Date</th>
+            </thead>            
+            <tbody>
+                {% for field in creditsRecieved %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ field.amount }}</td>
+                    <td>{{ field.transaction_reason }}</td>
+                    <td>{{ field.transaction_date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div> 
+    <button class="accordion" onclick="openAccordion('credSpen')">Credits Spent</button>
+    <div id='credSpen' class='panel'>
+        <table>
+            <thead>
+                <th>Number</th>
+                <th>Amount</th>
+                <th>Transaction Reason</th>
+                <th>Transaction Date</th>
+            </thead>            
+            <tbody>
+                {% for field in creditsSpent %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ field.amount }}</td>
+                    <td>{{ field.transaction_reason }}</td>
+                    <td>{{ field.transaction_date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <button class="accordion" onclick="openAccordion('UseCredits')">Use Credits</button>
+    <div id='UseCredits' class='panel'>
+        <h4>Link to gift card place</h4>
+        <h4>Targeted Ads here</h4>
+    </div>
 </div>

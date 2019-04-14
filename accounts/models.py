@@ -1,5 +1,5 @@
 from django.db import models
-from users.models import CustomUser
+from users.models import CustomUser, proShop
 
 # Create your models here.
 class account(models.Model):
@@ -17,11 +17,11 @@ class account(models.Model):
         return str(self.account_owner) + " Account"
     
     def transferFunds(account1, account2, amount, reason):
-        sourceAccount = account1.userAccount
-        destAccount = account2.userAccount
+        sourceAccount = account1
+        destAccount = account2
         sourceBalance = sourceAccount.current_balance
         destBalance = destAccount.current_balance
-        if sourceBalance > amount: 
+        if sourceBalance >= amount: 
             newSourceBalance = sourceBalance - amount
             newdestBalance = destBalance + amount
             destAccount.current_balance = newdestBalance
@@ -38,7 +38,7 @@ class account(models.Model):
         fundedAccount.current_balance += amount
         fundedAccount.save()
         AmAdUsr = CustomUser.objects.filter(username='AmAd')[0]
-        transaction.log_transaction(AmAdUsr.userAccount,fundedAccount,amount,"Adding purchased credits to the pro shop account")
+        transaction.log_transaction(AmAdUsr.userAccount,fundedAccount,amount,"Purchasing Credits")
          
 
     def createPlayerAccount(user):
@@ -58,7 +58,13 @@ class account(models.Model):
     def getAccount(user): 
         curAccount = account.objects.filter(account_owner = user)[0]
         return curAccount
-    
+
+    def getShopAccount(shop):
+        shopAcct = account.getAccount(shop.user)
+        return shopAcct
+
+    def getPlayerAccount(player):
+            return account.getAccount(player.user)
     def getTotalCredits(): 
         allAccounts = account.objects.all()
         accountTotal = 0.00
@@ -66,6 +72,11 @@ class account(models.Model):
             accountTotal = accountTotal + field.current_balance
         return accountTotal
 
+    def fundsAvailable(curAccount, amount): 
+        if curAccount.current_balance < amount: 
+            return False
+        else:
+            return True
 
     
 class transaction(models.Model): 
@@ -87,7 +98,7 @@ class transaction(models.Model):
     def getPayedTransactions(account1):
         transactions = account1.payedCredits.all()
         for field in transactions: 
-           field.amount = (-1)*amount
+           field.amount = (-1)*field.amount
         return transactions
 
     def getRecievedTransactions(account1):

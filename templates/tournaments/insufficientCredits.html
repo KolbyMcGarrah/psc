@@ -1,0 +1,20 @@
+
+{% load static %}
+<!-- Load Bootstrap-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="{% static 'tournament/insufficientFunds.css' %}">
+<link rel="shortcut icon" type="image/png" href="{% static '/images/blackbutton.png' %}">
+<div id="myModal" class="modal">
+    <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Insufficient Credits</h2>
+            </div>
+            <div class="modal-body">
+                <h3>Your account does not have enough credits to distriubte the tournament prize pool.</h3>
+                <h3>You need to purchase an additional {{ difference }} in order to complete this transaction.</h3>
+                <h3>Please purchase additional credits and then resume this transaction.</h3> 
+                <a class='btn btn-success' href='{% url 'purchaseFunds' %}'>Purchase Credits</a>
+            </div>
+        </div>
+</div>
