@@ -25,5 +25,6 @@ urlpatterns = [
     #User management
     path('users/', include('users.urls')),
     path('tournament/', include('tournament.urls')),
+    path('account/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
 ]

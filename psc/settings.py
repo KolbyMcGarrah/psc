@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'crispy_forms',
+    'braintree', 
+    'stripe',
 
     'users',
     'pages',
@@ -152,3 +154,11 @@ SITE_ID = 1
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
+
+BRAINTREE_MERCHANT_ID = 'pzbgb75kgpmvvj46'
+BRAINTREE_PUBLIC_KEY = 'f423zx7536787s3f'
+BRAINTREE_PRIVATE_KEY = 'af7353c37fb023f96ea98799c87caaf6'
+
+#Use Test Stripe Keys
+STRIPE_PUBLISHABLE_KEY = 'pk_test_y3aNGnrrQwW3InrwTnYfVNv100lSVzr9is'
+STRIPE_SECRET_KEY = 'sk_test_g3KOhgnD0bGjNSao09orZdjG004zrMC2NR'

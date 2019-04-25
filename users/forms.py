@@ -24,6 +24,4 @@ class playerCreationForm(forms.ModelForm):
         fields = ('address','homeCourse')
 
 class purchaseForm(forms.Form):
-    card_number = forms.IntegerField(required=False)
-    exp_date = forms.CharField(required=False)
     amount = forms.DecimalField(max_digits=11,decimal_places=2)

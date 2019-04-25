@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from .forms import userForm, shopCreationForm, purchaseForm
 from .models import CustomUser, proShop, player
 from tournament.models import *
-from accounts.models import account, transaction
+from accounts.models import account, transaction, credits
 from django.forms import inlineformset_factory
 import re
 
@@ -120,6 +120,7 @@ def playerActions(request):
     upcomingTournaments = tournament.objects.filter(players=request.user.userPlayer, status=True)
     previousTournaments = playerResults.getPlayerResults(request.user.userPlayer)
     playerAccount = account.getAccount(request.user)
+    playerCredits = credits.myCredits(request.user)
     creditsRecieved = transaction.getRecievedTransactions(playerAccount)
     creditsSpent = transaction.getPayedTransactions(playerAccount)
     userInfo = CustomUser.objects.filter(id = request.user.id)
@@ -130,6 +131,7 @@ def playerActions(request):
         "creditsSpent":creditsSpent,
         "userInfo":userInfo,
         "playerAccount":playerAccount,
+        "playerCredits":playerCredits,
     })
 
 def purchaseFunds(request):
@@ -138,9 +140,8 @@ def purchaseFunds(request):
     if request.method == "POST":
         form = purchaseForm(request.POST)
         if form.is_valid():
-            amount = form.cleaned_data['amount']
-            account.addShopFunds(curShop,amount)
-        return redirect("home")
+            request.session['amount'] = float(form.cleaned_data['amount'])
+        return redirect("payment")
     else: 
         return render(request, "proShop/purchaseFunds.html",{
             "form":form,

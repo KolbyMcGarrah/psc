@@ -1,0 +1,18 @@
+{% load static %}
+<!-- Load Bootstrap-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="{% static 'account/failedTransaction.css' %}">
+<link rel="shortcut icon" type="image/png" href="{% static '/images/blackbutton.png' %}">
+<div id="myModal" class="modal">
+    <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Error</h2>
+            </div>
+            <div class="modal-body">
+                <h3>The following error occurred with this transaction: "{{ error.error }}". Please verify that the correct card information was used and that there are enough funds available to complete the requested amount.</h3>
+                <a class='btn btn-primary' href='{% url 'payment' %}'>Retry Purchase</a>
+                <a class='btn btn-success' href='{% url 'home' %}'>Home</a>
+            </div>
+        </div>
+</div>

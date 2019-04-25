@@ -1,9 +1,9 @@
 {% load static %}
 <!-- Load Bootstrap-->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="{% static 'proShop/shopHomeStyle.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'player/playerActions.css' %}">
 <link rel="shortcut icon" type="image/png" href="{% static '/images/blackbutton.png' %}">
-<script src="{% static 'proShop/shopHomeJS.js' %}"></script>
+<script src="{% static 'player/playerActions.js' %}"></script>
 <h1>Welcome {{ user.username }}</h1>
 <div class="tab">
         <button class="tablinks" onclick="openTab(event, 'profileInfo')">Profile Information</button>
@@ -82,7 +82,28 @@
 <div id="account" class="tabContent">
     <button class="accordion" onclick="openAccordion('Balance')">Current Balance</button>
     <div id='Balance' class='panel'>
-            <h4>Current Credit Balance : {{ playerAccount.current_balance }}</h4>
+        <h4>Current Credit Balance : {{ playerAccount.current_balance }}</h4>
+        <h5>Credit Breakdown</h5>
+        <table>
+                <thead>
+                    <th>Number</th>
+                    <th>Amount</th>
+                    <th>Date Assigned</th>
+                    <th>Expiration Date</th>
+                    <th>Status</th>
+                </thead>            
+                <tbody>
+                    {% for field in playerCredits %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ field.credit_amount }}</td>
+                        <td>{{ field.date_assigned }}</td>
+                        <td>{{ field.expiration_date }}</td>
+                        <td>{{ field.get_status_display }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+        </table>
     </div>
     <button class="accordion" onclick="openAccordion('credRec')">Credits Recieved</button>
     <div id='credRec' class='panel'>

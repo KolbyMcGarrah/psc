@@ -1,0 +1,17 @@
+{% load static %}
+<!-- Load Bootstrap-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="{% static 'account/successful.css' %}">
+<link rel="shortcut icon" type="image/png" href="{% static '/images/blackbutton.png' %}">
+<div id="myModal" class="modal">
+    <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                    <h1>Success!</h1>
+            </div>
+            <div class="modal-body">
+                <h3>Your payment was accepted! Credits will be moved to your account. You can find this transaction history on your account page.</h3>
+                <a class='btn btn-success' href='{% url 'home' %}'>Return Home</a>
+            </div>
+        </div>
+</div>

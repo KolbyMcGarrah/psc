@@ -1,5 +1,6 @@
 from django.db import models
 from users.models import CustomUser, proShop
+from datetime import datetime, date, timedelta
 
 # Create your models here.
 class account(models.Model):
@@ -28,6 +29,7 @@ class account(models.Model):
             sourceAccount.current_balance = newSourceBalance
             destAccount.save()
             sourceAccount.save()
+            credits.assignCredit(amount,sourceAccount,destAccount)
             transaction.log_transaction(sourceAccount, destAccount, amount, reason)
             return True
         else: 
@@ -104,3 +106,27 @@ class transaction(models.Model):
     def getRecievedTransactions(account1):
         transactions = account1.recievedCredits.all()
         return transactions
+
+class credits(models.Model): 
+    status_choices = ((1,'Active'), (2,'Expiring'), (3,'Expired'))
+    credit_id = models.AutoField(primary_key=True)
+    credit_amount = models.DecimalField(max_digits=11, decimal_places=2, default=0.00)
+    date_assigned = models.DateField(auto_now=True)
+    expiration_date = models.DateField()
+    status = models.PositiveSmallIntegerField(choices=status_choices,default=1)
+    owner = models.ForeignKey(account,related_name="myCredits", on_delete=models.CASCADE, default=4)
+    source = models.ForeignKey(account,related_name='accountCredits', on_delete=models.CASCADE)
+    class Meta:
+        verbose_name_plural = 'Credits'
+
+    def assignCredit(amount,sourceAcct, destAccount): 
+        credit = credits()
+        credit.source = sourceAcct
+        credit.owner = destAccount
+        credit.expiration_date = date.today() + timedelta(days=60)
+        credit.credit_amount=amount
+        credit.save()
+        return credit
+    
+    def myCredits(curUser): 
+        return credits.objects.filter(owner=curUser.userAccount)
