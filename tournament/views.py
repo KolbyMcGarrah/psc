@@ -264,3 +264,13 @@ def insufficientCredits(request,id):
     return render(request, "tournaments/insufficientCredits.html",{
         "difference":difference,
     })
+
+def tournamentHistory(request, id): 
+    curTournament = tournament.getTournamentFromID(id)
+    results = playerResults.getTournamentPlayers(curTournament)
+    return render(request, "tournaments/tournamentHistory.html",{
+        "results":results,
+        "tournament":curTournament,
+    })
+
+

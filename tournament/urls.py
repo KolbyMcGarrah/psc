@@ -10,5 +10,6 @@ urlpatterns = [
     path('fundsOver/<id>', views.fundsOver, name='fundsOver'),
     path ('fundsUnder/<id>', views.fundsUnder, name='fundsUnder'),
     path('Success', views.Success, name='Success'),
-    path('insufficientCredits/<id>',views.insufficientCredits, name='insufficientCredits')
+    path('insufficientCredits/<id>',views.insufficientCredits, name='insufficientCredits'),
+    path('tournamentHistory/<id>',views.tournamentHistory, name='tournamentHistory')
 ]

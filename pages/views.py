@@ -13,6 +13,8 @@ class HomePageView(View):
                 return redirect('users/playerActions')
             elif userType['userType'] == 3:
                 return redirect('users/shopActions')
+            elif userType['userType'] == 5:
+                return redirect('users/execHome')
             else:
                 return render(request,'home.html')
         else:

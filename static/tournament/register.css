@@ -1,0 +1,52 @@
+
+h1, h3{
+    text-align: center;
+}
+select, input{
+    padding:2px;
+    margin-right:10px;
+    border:2px solid rgb(238,238,238)
+}
+form{
+    vertical-align:top;
+    max-width:400px;
+    margin:50px auto;
+}
+form input {
+    appearance:none;
+    width:100%;
+    position:relative;
+    padding:13px 10px 12px;
+    margin:10px auto;
+    border-bottom:1px solid #3b3b3b;
+    border-radius:5px;
+  }
+form select {
+    appearance:none;
+    width:33%;
+    position:relative;
+    padding:13px 10px 12px;
+    margin:10px auto;
+    border-bottom:1px solid #3b3b3b;
+    border-radius:5px;
+}
+form label {
+    appearance:none;
+    width:100%;
+    position:relative;
+    left:-10px;
+    border-radius:5px;
+  }
+p{
+    font-size:18px;
+    padding:10px;
+    margin:0 auto;
+    min-width:50%;
+}
+button{
+    margin-top:20px;
+    width:50%;
+    font-size:18px;
+    margin:10px auto;
+
+}

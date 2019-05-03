@@ -1,15 +1,15 @@
+{% extends "base.html" %}
 {% load static %}
-<!-- Load Bootstrap-->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+{% block css %}
 <link rel="stylesheet" type="text/css" href="{% static 'proShop/shopHomeStyle.css' %}">
-<link rel="shortcut icon" type="image/png" href="{% static '/images/blackbutton.png' %}">
 <script src="{% static 'proShop/shopHomeJS.js' %}"></script>
-<h1>Welcome {{ user.userShop.shop_name }}</h1>
+{% endblock %}
+{% block content %}
+<h1>{{ user.userShop.shop_name }}'s Home Page</h1>
 <div class="tab">
         <button class="tablinks" onclick="openTab(event, 'profileInfo')">Profile Information</button>
         <button class="tablinks" onclick="openTab(event, 'tournament')">Tournaments</button>
         <button class="tablinks" onclick="openTab(event, 'account')">Account</button>
-        <button class="tablinks"><a href="{% url 'logout' %}">Log Out</a></button>
 </div>
 <div id="tournament" class="tabContent">
         <button class="accordion" onclick="openAccordion('activeTourn')">Active Tournaments</button>
@@ -61,7 +61,7 @@
                                         <td>{{ tournament.tournament_name }}</td>
                                         <td>{{ tournament.created_on }}</td>
                                         <td>{{ tournament.tournament_date }}</td>
-                                        <td class='buttonCol'><button  type='submit' name='action' value="Remove"  class="btn btn-primary">View</button></td>
+                                        <td class='buttonCol'><a class="btn btn-primary" href="{% url 'tournamentHistory' id=tournament.tournament_id %}">View</a></td>
                                     </tr>                    
                                 {% endfor %}
                             </tbody>
@@ -83,6 +83,8 @@
         <p>{{ field.userShop.shop_name }}</p>
         <label>PGA Number</label>
         <p>{{ field.userShop.pga_number }}</p>
+        <label>Section</label>
+        <p>{{ field.userShop.get_section_display }}</p>
     {% endfor %}
 </div>
 
@@ -135,3 +137,4 @@
         </table>
     </div>
 </div>
+{% endblock %}

@@ -6,7 +6,7 @@ from .models import tournament, playerResults
 from django.forms import widgets, DateInput
 
 class tournamentForm(forms.ModelForm):
-    tournament_date = forms.DateField(widget=forms.DateInput(format=['%Y-%m-%d', '%m-%d-%Y', '%m/%d/%Y', '%Y/%m/%d']))
+    tournament_date = forms.DateField(widget=forms.SelectDateWidget())
     class Meta:
         model = tournament
         fields = ('tournament_name','tournament_date', 'prize_pool')

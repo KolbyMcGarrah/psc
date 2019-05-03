@@ -1,5 +1,5 @@
 from django.db import models
-from users.models import CustomUser, proShop
+from users.models import CustomUser, proShop, player, execUser
 from datetime import datetime, date, timedelta
 
 # Create your models here.
@@ -130,3 +130,7 @@ class credits(models.Model):
     
     def myCredits(curUser): 
         return credits.objects.filter(owner=curUser.userAccount)
+        
+    def getSectionCredits(curSection):
+        sectionCredits = credits.objects.filter(source__account_owner__userShop__section = curSection)
+        return sectionCredits

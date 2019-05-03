@@ -1,9 +1,10 @@
+{% extends 'base.hmtl' %}
 {% load static %}
-<!-- Load Bootstrap-->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+{% block css %}
 <link rel="stylesheet" type="text/css" href="{% static 'player/playerActions.css' %}">
-<link rel="shortcut icon" type="image/png" href="{% static '/images/blackbutton.png' %}">
 <script src="{% static 'player/playerActions.js' %}"></script>
+{% endblock %}
+{% block content %}
 <h1>Welcome {{ user.username }}</h1>
 <div class="tab">
         <button class="tablinks" onclick="openTab(event, 'profileInfo')">Profile Information</button>
@@ -147,9 +148,10 @@
             </tbody>
         </table>
     </div>
-    <button class="accordion" onclick="openAccordion('UseCredits')">Use Credits</button>
+    <button class="accordion" onclick="openAccordion('UseCredits')">Trade Credits</button>
     <div id='UseCredits' class='panel'>
         <h4>Link to gift card place</h4>
         <h4>Targeted Ads here</h4>
     </div>
 </div>
+{% endblock %}
