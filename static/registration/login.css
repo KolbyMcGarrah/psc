@@ -1,11 +1,11 @@
 
-h1, h3{
+h1{
     text-align: center;
 }
 form{
     vertical-align:top;
     max-width:400px;
-    margin:50px auto;
+    margin:100px auto;
 }
 form input {
     appearance:none;
@@ -22,7 +22,6 @@ form select {
     position:relative;
     padding:13px 10px 12px;
     margin:10px auto;
-    border:none;
     border-bottom:1px solid #3b3b3b;
 }
 form label {
@@ -33,10 +32,7 @@ form label {
     border-radius:5px;
   }
 form input:focus{
-    outline:none;
-}
-form select:focus{
-    outline:none;
+    outline:none;    
 }
 p{
     font-size:18px;
@@ -45,9 +41,7 @@ p{
     min-width:50%;
 }
 button{
-    margin-top:20px;
     width:50%;
-    font-size:18px;
+    font-size:18px !important;
     margin:10px auto;
-
 }
