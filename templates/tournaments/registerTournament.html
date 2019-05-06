@@ -1,9 +1,16 @@
+{% extends "base.html" %}
 {% load static %}
-<link rel="shortcut icon" type="image/png" href="{% static '/images/blackbutton.png' %}">
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'tournament/register.css' %}">
+{% endblock %}
+{% block content %}
 <h1>Register a Tournament</h1>
-<h3>Select a Tournament Name and the day the tournament will start.</h3>
+<h3>Please fill in the following fields to successfully register a new tournment.</h3>
 <form method = "post">
     {% csrf_token %}
-    {{newTourny}}
-    <button type="submit">Create</button>
+    {{newTourny.as_p}}
+    <div class='buttonContainer'>
+        <button class='btn btn-primary' type="submit">Create</button>
+    </div>    
 </form>
+{% endblock %}

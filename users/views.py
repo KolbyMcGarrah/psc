@@ -3,10 +3,10 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.http import HttpResponseRedirect
 from .forms import userForm, shopCreationForm, purchaseForm
-from .models import CustomUser, proShop, player
+from .models import CustomUser, proShop, player, execUser
 from tournament.models import *
 from accounts.models import account, transaction, credits
-from django.forms import inlineformset_factory
+from django.forms import inlineformset_factory, BaseInlineFormSet
 import re
 
 
@@ -41,9 +41,8 @@ def registerShop(request):
     success_url = reverse_lazy('login') 
     user = CustomUser()
     user_form = userForm(instance=user) # setup a form for the parent
-    ShopInlineFormSet = inlineformset_factory(CustomUser, proShop, fields = ('shop_name','head_pro','assistant_pro','shop_adress','pga_number'),can_delete=False)
+    ShopInlineFormSet = inlineformset_factory(CustomUser, proShop, form=shopCreationForm,can_delete=False)
     formset = ShopInlineFormSet(instance=user)
-
     if request.method == "POST":
         user_form = userForm(request.POST)       
         formset = ShopInlineFormSet(request.POST, request.FILES)
@@ -146,3 +145,11 @@ def purchaseFunds(request):
         return render(request, "proShop/purchaseFunds.html",{
             "form":form,
         })
+
+def execHome(request): 
+    user = request.user
+    curSection = user.execFields.section
+    sectionCredits = credits.getSectionCredits(curSection)
+    return render(request, "exec/execHome.html", {
+        "sectionCredits":sectionCredits,
+    })

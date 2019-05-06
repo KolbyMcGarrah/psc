@@ -95,7 +95,7 @@ def updateTournament(request, id):
                 buttonID = re.match(r"remove\s(\d+)", postAction)
                 print(buttonID.group(1))
                 deletePlayer = CustomUser.objects.filter(id=buttonID.group(1))
-                playerResults.objects.filter(player=deletePlayer[0].userPlayer, tournament=curTournament[0]).delete()
+                playerResults.objects.filter(player=deletePlayer[0].userPlayer, tournament=curTournament).delete()
                 return render(request, 'tournaments/updateTournament.html',{
                     'curTournament' : curTournament,
                     'tournamentPlayers': tournamentPlayers,
@@ -264,3 +264,13 @@ def insufficientCredits(request,id):
     return render(request, "tournaments/insufficientCredits.html",{
         "difference":difference,
     })
+
+def tournamentHistory(request, id): 
+    curTournament = tournament.getTournamentFromID(id)
+    results = playerResults.getTournamentPlayers(curTournament)
+    return render(request, "tournaments/tournamentHistory.html",{
+        "results":results,
+        "tournament":curTournament,
+    })
+
+

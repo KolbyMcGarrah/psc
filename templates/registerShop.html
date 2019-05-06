@@ -1,26 +1,22 @@
+{% extends 'base.html' %}
 {% load static %}
-<head>
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-  <link rel="shortcut icon" type="image/png" href="{% static '/images/blackbutton.png' %}">
+{% block css %}
   <link rel="stylesheet" type="text/css" href="{% static 'registerShop.css' %}">
-
-</head>
-<header>
-    <img src="{% static 'images/AmAdLogo.jpg' %}" height="200" width="500">
-</header>
-<div class='container'>
-  <h1>Register a Pro Shop</h1>
-  <form method='post'>
-    {% csrf_token %}
-    <div class = background> 
-      <div class="nameFields">
-      {% for field in user_form %}
-          <p>{{ field.label_tag }} {{ field }}</p>
-      {% endfor %}
-          <p>{{formset.as_p}}</p>
-          <button type="submit">Register</button>
-      </div>
-    </div>   
-  </form>
+{% endblock %}
+{% block content %}
 <div>
+    <h1>Register a Pro Shop</h1>
+    <form method='post'>
+      {% csrf_token %}
+      <div class = background> 
+        <div class="nameFields">
+        {% for field in user_form %}
+            <p>{{ field.label_tag }} {{ field }}</p>
+        {% endfor %}
+            <p>{{formset.as_p}}</p>
+            <button type="submit">Register</button>
+        </div>
+      </div>   
+    </form>
+<div>
+{% endblock %}

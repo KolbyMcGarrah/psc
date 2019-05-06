@@ -1,6 +1,12 @@
-<h2>Login</h2>
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'registration/login.css' %}">
+{% endblock %}
+{% block content %}
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Login</button>
+    <button class = 'btn btn-primary' type="submit">Login</button>
 </form>
+{% endblock %}

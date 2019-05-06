@@ -9,19 +9,25 @@
 </header>
 <body>
     <div class="frame">
-        {% if user.is_authenticated %}
-            <p>Hi {{ user.username }}</p>
-            <p><a href="{% url 'logout' %}">Log Out</a></p>
-        {% endif %}
-        <h1 class="siteHeader">Welcome to AmatureAdvantage.com</h1>
-        <div class="siteInfo">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris molestie, sem tempor tincidunt vulputate, purus ipsum tristique dui, a molestie velit purus vitae sapien. Nunc tincidunt sodales purus, vitae eleifend ligula elementum id. Donec nec sollicitudin leo. Maecenas sed rhoncus ex, et interdum turpis. Aenean accumsan sit amet urna sed egestas. In rhoncus rutrum eros. Fusce pulvinar pharetra justo, ac luctus felis efficitur ac. Maecenas nibh dolor, hendrerit sit amet libero vel, venenatis accumsan leo. Donec metus nisl, gravida a tellus vitae, sodales fringilla diam. Etiam vestibulum consectetur augue a malesuada.</p>
+        <div class='textCont'>
+            {% if user.is_authenticated %}
+                <p>Hi {{ user.username }}</p>
+                <p><a href="{% url 'logout' %}">Log Out</a></p>
+            {% endif %}
+            <h1 class="siteHeader">Welcome to AmateurAdvantage.com</h1>
+            <div class="siteInfo">
+                <h2>Where the amateur truly has the advantage!</h2>
+                <ul>
+                    <li>Universal credit that can be redeemed at any shop using Amature Advantage.</li>
+                    <li>Paperless credit means that your credit is always with you.</li>
+                    <li>Exchange your credit for discounted gift cards at your favorite restaurants and stores.</li>
+                </ul>
+            </div>
         </div>
         <div class="optionContainer">
             <a href="{% url 'registerPlayer' %}"><div class="option registerUser"><div class="iconStyling registerUser"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></div><p class="optionItem">Register User</p></div></a>
             <a href="{% url 'registerShop' %}"><div class="option registerTournament"><div class="iconStyling registerTournament"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></div><p class="optionItem">Register Pro Shop</p></div></a>
             <a href="{% url 'login'  %}"><div class="option checkAccount"><div class="iconStyling checkAccount"><span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span></div><p class="optionItem">Check Account</p></div></a>
-        </div>
-        
+        </div>        
     </div>
 </body>

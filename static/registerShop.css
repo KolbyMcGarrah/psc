@@ -38,3 +38,12 @@ button{
 label{
     width:230px;
 }
+select{
+    color:black;
+    width:250px;
+    margin-left:40px;
+    padding:2px;
+}
+.logout{
+    display:none;
+}
