@@ -95,7 +95,7 @@ def updateTournament(request, id):
                 buttonID = re.match(r"remove\s(\d+)", postAction)
                 print(buttonID.group(1))
                 deletePlayer = CustomUser.objects.filter(id=buttonID.group(1))
-                playerResults.objects.filter(player=deletePlayer[0].userPlayer, tournament=curTournament[0]).delete()
+                playerResults.objects.filter(player=deletePlayer[0].userPlayer, tournament=curTournament).delete()
                 return render(request, 'tournaments/updateTournament.html',{
                     'curTournament' : curTournament,
                     'tournamentPlayers': tournamentPlayers,

@@ -1,4 +1,4 @@
-{% extends 'base.hmtl' %}
+{% extends 'base.html' %}
 {% load static %}
 {% block css %}
 <link rel="stylesheet" type="text/css" href="{% static 'player/playerActions.css' %}">
@@ -77,6 +77,8 @@
         <p>{{ field.userPlayer.address }}</p>
         <label>Home Course</label>
         <p>{{ field.userPlayer.homeCourse }}</p>
+        <label>Phone Number</label>
+        <p>{{ field.phoneNumber }}</p>
     {% endfor %}
 </div>
 
