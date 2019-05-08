@@ -80,6 +80,17 @@ class account(models.Model):
         else:
             return True
 
+    def deductFunds(curAccount,shopAccount,amount,reason):
+        if account.fundsAvailable(curAccount, amount):
+            previousBalance = curAccount.current_balance
+            newBalance = previousBalance - amount
+            curAccount.current_balance = newBalance
+            curAccount.save()
+            transaction.log_transaction(curAccount,shopAccount,amount,reason)
+            return True
+        else:
+            return False
+
     
 class transaction(models.Model): 
     transaction_ID = models.AutoField(primary_key=True)
@@ -134,3 +145,22 @@ class credits(models.Model):
     def getSectionCredits(curSection):
         sectionCredits = credits.objects.filter(source__account_owner__userShop__section = curSection)
         return sectionCredits
+    
+    def spendCredits(source, destination, amount, reason):
+        availableCredits = credits.objects.filter(owner=source).order_by('expiration_date')
+        remainder = amount
+        if account.deductFunds(source,destination,amount,reason):
+            for credit in availableCredits:
+                if remainder > 0:
+                    remainder = remainder - credit.credit_amount
+                    credit.credit_amount = (-1)*remainder
+                    if credit.credit_amount <= 0:
+                        credit.credit_amount = 0
+                    credit.save()
+                else:
+                    pass                               
+            credits.objects.filter(owner=source,credit_amount = 0).delete()
+            return True
+        else:
+            return amount - source.current_balance
+                    

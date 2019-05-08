@@ -10,6 +10,7 @@
         <button class="tablinks" onclick="openTab(event, 'profileInfo')">Profile Information</button>
         <button class="tablinks" onclick="openTab(event, 'tournament')">Tournaments</button>
         <button class="tablinks" onclick="openTab(event, 'account')">Account</button>
+        <button class='tablinks' onclick="openTab(event, 'Shop')">Shop</button>
 </div>
 <div id="tournament" class="tabContent">
         <button class="accordion" onclick="openAccordion('activeTourn')">Active Tournaments</button>
@@ -136,5 +137,41 @@
             </tbody>
         </table>
     </div>
+</div>
+<div id="Shop" class="tabContent">
+    <form method='post'>
+        {% csrf_token %}
+        {{ searchForm.as_p }}
+        <button class='btn btn-primary' type='submit' name='action' value='search'>Search</button>
+    </form>
+    {% if playerResults %}
+    <form method='post'>
+        {% csrf_token %}
+            <table>
+                <thead>
+                    <th>Username</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Credit Amount</th>
+                    <th>Spend</th>
+                </thead>
+                <tbody>
+                    {% for player in playerResults %}
+                    <tr>
+                        <td>{{ player.username }}</td>
+                        <td>{{ player.first_name }}</td>
+                        <td>{{ player.last_name }}</td>
+                        <td>{{ player.email }}</td>
+                        <td>{{ player.phoneNumber }}</td>
+                        <td>{{ player.userAccount.current_balance }}</td>
+                        <td class='buttonCol'><button type='submit' name='action' value="spend {{player.id}}" class = "btn btn-success">Spend Credits</button></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+    </form>
+    {% endif %}
 </div>
 {% endblock %}

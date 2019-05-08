@@ -1,15 +1,10 @@
+{% extends 'base.html' %}
 {% load static %}
-<html>
-    <head>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+{% block css %}
     <link rel="stylesheet" type="text/css" href="{% static 'account/purchaseFunds.css' %}">
-    <link rel="shortcut icon" type="image/png" href="{% static '/images/blackbutton.png' %}">
     <script src="https://js.stripe.com/v3/"></script>
-   </head>
-   <header>
-      <img src="{% static 'images/AmAdLogo.jpg' %}" height="100" width="250">
-  </header>
-    <body>
+{% endblock %}
+{% block content %}
       <div class="wrapper">
         <h4>Please enter the amount of credits you wish to purchase in the amount field.</h4>
         <p>Purchased credits are to be distriubted as shop credit and distributed as tournament prizes.</p>
@@ -31,5 +26,4 @@
     <script src="{% static 'account/funds.js' %}"></script>
     <iframe frameborder="0" allowtransparency="true" scrolling="no" name="__privateStripeController1" allowpaymentrequest="true" src="https://js.stripe.com/v3/controller-2ace0711417171a8a30d52b4cb011e58.html#apiKey=pk_test_y3aNGnrrQwW3InrwTnYfVNv100lSVzr9is&amp;stripeJsId=096031e2-af23-4e9b-913e-16b55fc17950&amp;origin=https%3A%2F%2Fstripe.com&amp;referrer=https%3A%2F%2Fstripe.com%2Fdocs%2Fstripe-js&amp;controllerId=__privateStripeController1" aria-hidden="true" tabindex="-1" style="border: none !important; margin: 0px !important; padding: 0px !important; width: 1px !important; min-width: 100% !important; overflow: hidden !important; display: block !important; visibility: hidden !important; position: fixed !important; height: 1px !important; pointer-events: none !important;"></iframe>
     <iframe frameborder="0" allowtransparency="true" scrolling="no" name="__privateStripeMetricsController0" allowpaymentrequest="true" src="https://js.stripe.com/v2/m/outer.html#url=https%3A%2F%2Fstripe.com%2Fdocs%2Fstripe-js&amp;title=&amp;referrer=&amp;muid=87c9d6fd-ece8-4c98-bd6b-27ab25053a1c&amp;sid=72b1ffd9-0528-43fe-ad29-566e999dba5f&amp;preview=true" aria-hidden="true" tabindex="-1" style="border: none !important; margin: 0px !important; padding: 0px !important; width: 1px !important; min-width: 100% !important; overflow: hidden !important; display: block !important; visibility: hidden !important; position: fixed !important; height: 1px !important; pointer-events: none !important;"></iframe>
-  </body>
-</html>
+{% endblock %}

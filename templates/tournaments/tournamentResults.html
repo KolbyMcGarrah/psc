@@ -40,7 +40,8 @@
                         <table class="formTable">
                             <thead>
                                 <th>Position</th>
-                                <th>Amount Won</th>
+                                <th>Amount Won</th>                                
+                                <th>Division</th>
                                 <th>Championship Flight</th>
                             </thead>
                             {% csrf_token %}
@@ -49,6 +50,7 @@
                             <tr class='rowData'>
                                 <td>{{ form.position }}</td>
                                 <td>{{ form.amount_won }}</td>
+                                <td>{{ form.division  }}</td>
                                 <td>{{ form.flight }}</td>
                             </tr> 
                             {{ form.id }}

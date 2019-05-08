@@ -23,6 +23,7 @@
                 <th>Email</th>
                 <th>Position</th>
                 <th>Amount Won</th>
+                <th>Division</th>
                 <th>Championship Flight</th>
             </thead>
             <tbody>
@@ -36,6 +37,7 @@
                         <td>{{ result.player.user.email }}</td>
                         <td>{{ result.position }}</td>
                         <td>{{ result.amount_won }}</td>
+                        <td>{{ result.get_division_display }}</td>
                         <td>{{ result.get_flight_display }}</td>
                     </tr>
                 {% endfor %}

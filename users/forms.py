@@ -28,3 +28,7 @@ class playerCreationForm(forms.ModelForm):
 
 class purchaseForm(forms.Form):
     amount = forms.DecimalField(max_digits=11,decimal_places=2)
+
+class spendForm(forms.Form):
+    Amount = forms.DecimalField(max_digits=11, decimal_places=2)
+    Item_Description = forms.CharField()

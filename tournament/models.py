@@ -70,13 +70,17 @@ class tournament (models.Model):
         
 class playerResults (models.Model): 
     flight_choices = ((1,'Flight 1'), (2,'Flight 2'), (3,'Flight 3'), (4,'Flight 4'), (5,'Flight 5'), (6,'Flight 6'), (7,'Flight 7'), (8,'Flight 8'),
-                     (9,'Flight 9'), (10,'Flight 10'), (11,'Senior'), (12,'Women'), (13,'Junior'),(14,'Men'))
+                     (9,'Flight 9'), (10,'Flight 10'))
+    division_choices = ((1,'Senior'), (2,'Women'), (3,'Junior'),(4,'Men'))
     tournament = models.ForeignKey(tournament, related_name = 'tournamentSet',on_delete=models.CASCADE)
     player = models.ForeignKey(player, related_name='tournamentPlayer', on_delete=models.CASCADE)
     amount_won = models.DecimalField(max_digits=11,decimal_places=2, blank=True, null=True, default = 0.00)
     position = models.PositiveIntegerField(blank=True, null=True, default = '0')
     flight = models.PositiveSmallIntegerField(
                   choices=flight_choices,
+                  default=1)
+    division = models.PositiveSmallIntegerField(
+                  choices=division_choices,
                   default=1)
     added_on = models.DateField(auto_now_add = True)
     class Meta:

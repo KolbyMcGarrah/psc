@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic
 from django.http import HttpResponseRedirect
-from .forms import userForm, shopCreationForm, purchaseForm
+from .forms import userForm, shopCreationForm, spendForm
 from .models import CustomUser, proShop, player, execUser
 from tournament.models import *
+from tournament.forms import existingPlayer
 from accounts.models import account, transaction, credits
 from django.forms import inlineformset_factory, BaseInlineFormSet
 import re
@@ -70,13 +71,16 @@ def shopActions(request):
     shopAccount = account.getAccount(request.user)
     creditsRecieved = transaction.getRecievedTransactions(shopAccount)
     creditsSpent = transaction.getPayedTransactions(shopAccount)
-    purchForm = purchaseForm()
+    searchForm = existingPlayer()
     if request.method == "POST":
         postAction = request.POST['action']
+        print(postAction)
         if 'update' in postAction:
+            print('updating')
             tournamentID = re.match(r"update\s(\d+)", postAction)
             return redirect('updateTournament', id=tournamentID.group(1))
         elif 'remove' in postAction:
+            print('removing')
             tournamentID = re.match(r"remove\s(\d+)", postAction)
             curTournament = tournament.objects.get(tournament_id = tournamentID.group(1))
             curTournament.active = False
@@ -88,23 +92,27 @@ def shopActions(request):
                 "userInfo":userInfo,
                 "creditsSpent":creditsSpent,
                 "creditsRecieved":creditsRecieved,
-                "purchase_form":purchForm,
+                "searchForm":searchForm,
             })
-        elif 'purchase':
-            form = purchaseForm(request.POST)
+        elif postAction == 'search':
+            print('searching for a player')
+            form = existingPlayer(request.POST)
             if form.is_valid():
-                amount = form.cleaned_data['amount']
-                account.addShopFunds(userInfo[0],amount)
-            purchForm = purchaseForm
-            return render(request, "proShop/shopActions.html", {
-                "shopAccount":shopAccount,
-                "activeTournaments":activeTournaments,
-                "expiredTournaments":expiredTournaments,
-                "userInfo":userInfo,
-                "creditsSpent":creditsSpent,
-                "creditsRecieved":creditsRecieved,
-                "purchase_form":purchForm,
-            })
+                playerResults = CustomUser.objects.filter(first_name = form.cleaned_data['First_Name'], last_name = form.cleaned_data['Last_Name'])
+                return render(request, "proShop/shopActions.html", {
+                    "shopAccount":shopAccount,
+                    "activeTournaments":activeTournaments,
+                    "expiredTournaments":expiredTournaments,
+                    "userInfo":userInfo,
+                    "creditsSpent":creditsSpent,
+                    "creditsRecieved":creditsRecieved,
+                    "searchForm":searchForm,
+                    "playerResults":playerResults,
+                })
+        elif 'spend' in postAction:
+            print('spending')
+            spendID = re.match(r"spend\s(\d+)", postAction)
+            return redirect('spendCredits', id=spendID.group(1))    
     else:
         return render(request, "proShop/shopActions.html", {
             "shopAccount":shopAccount,
@@ -113,7 +121,7 @@ def shopActions(request):
             "activeTournaments":activeTournaments,
             "expiredTournaments":expiredTournaments,
             "userInfo":userInfo,
-            "purchase_form":purchForm,
+            "searchForm":searchForm,
         })
 def playerActions(request):
     upcomingTournaments = tournament.objects.filter(players=request.user.userPlayer, status=True)
@@ -153,3 +161,30 @@ def execHome(request):
     return render(request, "exec/execHome.html", {
         "sectionCredits":sectionCredits,
     })
+
+def spendCredits(request,id):
+    curShop = request.user.userShop
+    curPlayer = CustomUser.objects.filter(id=id)[0]
+    playerAccount = account.getAccount(curPlayer)
+    playerCredits = credits.myCredits(curPlayer)
+    shopAccount = account.getShopAccount(curShop)
+    form = spendForm()
+    if request.method == "POST":
+        form = spendForm(request.POST)
+        if form.is_valid():
+            result = credits.spendCredits(playerAccount,shopAccount,form.cleaned_data['Amount'], form.cleaned_data['Item_Description'])
+            if result == True:
+                return redirect('home')
+            else:
+                print('')
+                return redirect('spendCredits',id=id)
+    else:    
+        return render(request, "proShop/spendCredits.html",{
+            "playerCredits":playerCredits,
+            "shop":curShop,
+            "player":curPlayer,
+            "playerAccount":playerAccount,
+            "form":form,
+        })
+    
+    
