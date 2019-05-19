@@ -168,7 +168,7 @@ class credits(models.Model):
             return amount - source.current_balance
 
 class BillingEvent(models.Model):
-    event_status = ((1,'awaiting_approval'),(2,'unnapproved'),(3,'approved'),(4,'complete'))
+    event_status = ((1,'awaiting_approval'),(2,'not approved'),(3,'approved'),(4,'complete'))
     BillingEventID = models.AutoField(primary_key = True)
     amount = models.DecimalField(max_digits=11, decimal_places=2, default=0.00)
     description = models.CharField(max_length=1000)
