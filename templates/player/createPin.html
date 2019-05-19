@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method = 'post'>
+    {%csrf_token%}
+    <h2>One last thing...</h2>
+    <p>Please create a secure 4 digit PIN for your Amateur Advantage account.</p>
+    <p>This PIN will be used to authorize transactions when using earned credits so keep it private.</p>
+        {{form}}
+    <button type='submit' class='btn btn-primary'>Confirm Pin</button>
+</form>
+{% endblock %}

@@ -1,7 +1,6 @@
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+from passlib.hash import pbkdf2_sha256 
 
 class CustomUserManager(UserManager):
     pass
@@ -24,8 +23,20 @@ class player (models.Model):
     #               default=2)
     insrt_timestamp = models.DateField(auto_now_add = True)
     chnge_timestamp = models.DateField(auto_now = True)
+    pin = models.CharField(max_length=128, default='0000')
+        
     def __str__(self):
         return str(self.user)
+    
+    def updatePin(newUser, Pin):
+        updatePlayer = newUser.userPlayer
+        updatePlayer.pin = pbkdf2_sha256.encrypt(Pin,rounds=120000,salt_size=32)
+        updatePlayer.save()
+    
+    def checkPin(player, Pin):
+        curPlayer = player.userPlayer
+        playerPIN = curPlayer.pin
+        return pbkdf2_sha256.verify(Pin, playerPIN)
 
 class proShop (models.Model):
     section_options = ((1,'Alabama'),(2,'Colorado'),(3,'Carolinas'),(4,'Georgia'),(5,'Central New York'),(6,'Illinois'),(7,'Connecticut'),(8,'Iowa'),(9,'Gateway'),(10,'Metropolitan NY'),

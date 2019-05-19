@@ -9,4 +9,6 @@ urlpatterns = [
     path('purchaseFunds/', views.purchaseFunds, name = 'purchaseFunds'),     
     path('execHome/', views.execHome, name = 'execHome'),
     path('spendCredits/<id>', views.spendCredits, name='spendCredits'),
+    path('createPin/', views.createPin, name='createPin'),    
+    path('authorizeTransaction/', views.authorizeTransaction, name='authorizeTransaction'),
 ]

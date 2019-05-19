@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+    <form method='post'>
+        {% csrf_token %}
+        <h3>Authorize this purchase by having the player enter their account PIN.</h3>
+            {{form.as_p}}
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+       <p>By selecting Confirm, you are authorizing the purchase of {{event.description}} from {{shop.shop_name}}.</p>
+        <p>The amount of {{event.amount}} will be deducted from your availabe credits.</p>
+        <p>Select Cancel to decline this purchase.</p>
+        <button type = 'submit' class = 'btn btn-success' name='action' value = 'confirm'>Confirm Purchase</button>
+    </form>
+    <form method='post'>
+        {% csrf_token %}
+        <button type = 'submit' class = 'btn btn-danger' name='action' value = 'cancel'>Cancel</button>
+    </form>
+{% endblock %}

@@ -125,10 +125,13 @@ class credits(models.Model):
     date_assigned = models.DateField(auto_now=True)
     expiration_date = models.DateField()
     status = models.PositiveSmallIntegerField(choices=status_choices,default=1)
-    owner = models.ForeignKey(account,related_name="myCredits", on_delete=models.CASCADE, default=4)
+    owner = models.ForeignKey(account,related_name="myCredits", on_delete=models.CASCADE, default=106)
     source = models.ForeignKey(account,related_name='accountCredits', on_delete=models.CASCADE)
     class Meta:
         verbose_name_plural = 'Credits'
+    
+    def __str__(self):
+        return str(self.credit_amount) + ' credits for ' + str(self.owner)
 
     def assignCredit(amount,sourceAcct, destAccount): 
         credit = credits()
@@ -163,4 +166,57 @@ class credits(models.Model):
             return True
         else:
             return amount - source.current_balance
+
+class BillingEvent(models.Model):
+    event_status = ((1,'awaiting_approval'),(2,'unnapproved'),(3,'approved'),(4,'complete'))
+    BillingEventID = models.AutoField(primary_key = True)
+    amount = models.DecimalField(max_digits=11, decimal_places=2, default=0.00)
+    description = models.CharField(max_length=1000)
+    shop_account = models.ForeignKey(account,related_name='shopBillingEvents', on_delete=models.CASCADE)
+    player_account = models.ForeignKey(account,related_name='playerBillingEvent', on_delete=models.CASCADE)
+    status = models.PositiveSmallIntegerField(choices=event_status,default=1)
+    auth_attempt_counter = models.IntegerField(default=3)
+    request_ts = models.DateField(auto_now_add = True)
+    update_ts = models.DateField(auto_now = True)
+
+    def __str__(self):
+        return str(self.request_ts) + ' ' + str(self.shop_account) + ' ' + str(self.status) + ' Billing Event for ' + str(self.description)
+    
+    def initializeEvent(player, shop, desc, amt):
+        newEvent = BillingEvent.objects.create(status=1,amount=amt,description=desc, player_account=player.userAccount, shop_account=shop.userAccount)
+        return newEvent
+    
+    def approveEvent(event):
+        event.status = 3
+        event.save()
+        return True
+
+    def completeEvent(event):
+        event.status = 4
+        event.save()
+        return True
+    
+    def cancelEvent(event):
+        event.status = 2
+        event.save()
+        return True
+
+    def getEvents(shop):
+        return shop.userAccount.shopBillingEvents
+    
+    def getCompleteEvents(shop):
+        return BillingEvent.objects.filter(shop_account=shop.userAccount, status = 4)
+    
+    def getApprovedEvents(shop):
+        return BillingEvent.objects.filter(shop_account=shop.userAccount, status = 3)
+    
+    def authMiss(event):
+        missCounter = event.auth_attempt_counter
+        missCounter = missCounter - 1
+        event.auth_attempt_counter = missCounter
+        event.save()
+        return missCounter
+
+
+
                     

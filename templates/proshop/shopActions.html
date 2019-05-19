@@ -95,6 +95,9 @@
             <h4>Current Credit Balance : {{ shopAccount.current_balance }} </h4>
             <p><a href="{% url 'payment' %}" class='btn btn-success'>Purchase Credits</a></p>
     </div>
+    <button class="accordion" onclick="openAccordion('bEvent')">Approve Purchases</button>
+    <div id='bEvent' class='panel'>
+    </div>
     <button class="accordion" onclick="openAccordion('credRec')">Credits Recieved</button>
     <div id='credRec' class='panel'>
         <table>
