@@ -13,6 +13,24 @@ class CustomUser(AbstractUser):
                   default=1)
     phoneNumber = models.CharField(max_length = 10, null=True)
 
+    def isPlayer(user):
+        if user.userType == 2:
+            return True
+        else:
+            return False
+    
+    def isShop(user):
+        if user.userType == 3:
+            return True
+        else:
+            return False
+
+    def isExec(user):
+        if user.userType == 5:
+            return True
+        else:
+            return False
+
 class player (models.Model):
     #golf_level_choices = ((1,'pro'), (2,'amature'))
     user = models.OneToOneField(CustomUser, related_name='userPlayer', on_delete=models.CASCADE, primary_key = True)

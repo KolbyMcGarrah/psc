@@ -1,12 +1,19 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import account, transaction
 from users.forms import purchaseForm
+from users.models import CustomUser
 from django.conf import settings
 from decimal import Decimal
 import stripe
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
+def shop_test(user):
+    return CustomUser.isShop(user)
+
+@login_required
+@user_passes_test(shop_test,login_url='/')
 def payment(request):
     curShop = request.user
     if request.method == "POST":
@@ -34,10 +41,13 @@ def payment(request):
         return render(request, "account/purchaseFunds.html",{
             "form":form,
         })
-
+@login_required
+@user_passes_test(shop_test,login_url='/')
 def successfulTransaction(request):
     return render(request,'account/successfulTransaction.html')
-
+    
+@login_required
+@user_passes_test(shop_test,login_url='/')
 def failedTransaction(request):
     transError = request.session['transError']
     context = {"error":transError}

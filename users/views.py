@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.urls import reverse_lazy
 from django.views import generic
 from django.http import HttpResponseRedirect
@@ -11,14 +12,20 @@ from accounts.models import account, transaction, credits, BillingEvent
 from django.forms import inlineformset_factory, BaseInlineFormSet
 import re
 
+def shop_test(user):
+    return CustomUser.isShop(user)
+
+def player_test(user):
+    return CustomUser.isPlayer(user)
+
+def exec_test(user):
+    return CustomUser.isExec(user)
 
 def playerRegistration(request):
     user = CustomUser()
     user_form = userForm(instance=user)
-
     playerInlineFormSet = inlineformset_factory(CustomUser, player, form=playerCreationForm,can_delete=False)
     formset = playerInlineFormSet(instance=user)
-
     if request.method == "POST":
         user_form = userForm(request.POST)
         formset = playerInlineFormSet(request.POST, request.FILES)
@@ -38,7 +45,6 @@ def playerRegistration(request):
         "formset": formset,
     })
 
-
 def registerShop(request):
     success_url = reverse_lazy('login') 
     user = CustomUser()
@@ -48,7 +54,6 @@ def registerShop(request):
     if request.method == "POST":
         user_form = userForm(request.POST)       
         formset = ShopInlineFormSet(request.POST, request.FILES)
-
         if user_form.is_valid():
             created_user = user_form.save(commit=False)
             formset = ShopInlineFormSet(request.POST, request.FILES, instance=created_user)
@@ -59,12 +64,13 @@ def registerShop(request):
                 shopAccount = account.createShopAccount(created_user)
                 shopAccount.save()
                 return HttpResponseRedirect(success_url)
-
     return render(request, "registerShop.html", {
         "user_form": user_form,
         "formset": formset,
     })
 
+@login_required
+@user_passes_test(shop_test,login_url='/', redirect_field_name=None)
 def shopActions(request):
     activeTournaments = tournament.getActiveTournaments(request.user.userShop)
     expiredTournaments = tournament.objects.filter(shop=request.user.userShop, status=4)
@@ -124,6 +130,8 @@ def shopActions(request):
             "userInfo":userInfo,
             "searchForm":searchForm,
         })
+@login_required
+@user_passes_test(player_test,login_url='/', redirect_field_name=None)
 def playerActions(request):
     upcomingTournaments = tournament.objects.filter(players=request.user.userPlayer, status=True)
     previousTournaments = playerResults.getPlayerResults(request.user.userPlayer)
@@ -142,6 +150,8 @@ def playerActions(request):
         "playerCredits":playerCredits,
     })
 
+@login_required
+@user_passes_test(shop_test,login_url='/', redirect_field_name=None)
 def purchaseFunds(request):
     curShop = request.user
     form = purchaseForm()
@@ -155,6 +165,8 @@ def purchaseFunds(request):
             "form":form,
         })
 
+@login_required
+@user_passes_test(exec_test,login_url='/', redirect_field_name=None)
 def execHome(request): 
     user = request.user
     curSection = user.execFields.section
@@ -163,6 +175,8 @@ def execHome(request):
         "sectionCredits":sectionCredits,
     })
 
+@login_required
+@user_passes_test(shop_test,login_url='/', redirect_field_name=None)
 def spendCredits(request,id):
     curShop = request.user.userShop
     curPlayer = CustomUser.objects.filter(id=id)[0]
@@ -187,6 +201,7 @@ def spendCredits(request,id):
             "playerAccount":playerAccount,
             "form":form,
         })
+
 def createPin(request):
     if 'userID' in request.session:
         userID = request.session['userID']
@@ -198,7 +213,7 @@ def createPin(request):
         if pinForm.is_valid():
             player.updatePin(currentUser, pinForm.cleaned_data['Account_Pin'])
             del request.session['userID']
-            return HttpResponseRedirect(reverse_lazy('login'))
+            return redirect('home')
         else:
             return render(request, 'player/createPin.html',{
                 'form':pinForm,
@@ -209,6 +224,8 @@ def createPin(request):
             'form':pinForm,
         })
 
+@login_required
+@user_passes_test(shop_test,login_url='/', redirect_field_name=None)
 def authorizeTransaction(request):
     curShop = request.user.userShop
     billingEvent = BillingEvent.objects.filter(BillingEventID=request.session['billingID'])[0]

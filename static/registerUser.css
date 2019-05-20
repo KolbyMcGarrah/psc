@@ -6,13 +6,11 @@ h2{
     margin-bottom:20px;
 }
 .frame{
-    width:75vw;
     margin:50px auto;
     background-color:transparent;
     display:grid;
     grid-template-columns:50% 50%;
     box-shadow:20px 20px 50px;
-    height:75%;
     border-radius:30px;
 }
 input:focus{
