@@ -166,6 +166,22 @@ class credits(models.Model):
             return True
         else:
             return amount - source.current_balance
+    
+    def expireCredits():
+        today = date.today()
+        total_credits = credits.objects.filter(expiration_date__lt = today,status=2)
+        for credit in total_credits:
+            print("Updating: " + str(credit))
+            credit.status = 3
+            credit.save()
+
+    def expiringCredits():
+        exp_range = date.today() + timedelta(days=10)
+        total_credits = credits.objects.filter(expiration_date__lt = exp_range, status=1)
+        for credit in total_credits:
+            print('Updating :' + str(credit))
+            credit.status = 2
+            credit.save()
 
 class BillingEvent(models.Model):
     event_status = ((1,'awaiting_approval'),(2,'not approved'),(3,'approved'),(4,'complete'))
