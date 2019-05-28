@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.http import HttpResponseRedirect
 from django.contrib import messages
-from .forms import userForm, shopCreationForm, spendForm, playerCreationForm, pinCreation, playerAuthPurchaseForm
+from .forms import *
 from .models import CustomUser, proShop, player, execUser
 from tournament.models import *
 from tournament.forms import existingPlayer
@@ -140,15 +140,19 @@ def playerActions(request):
     creditsRecieved = transaction.getRecievedTransactions(playerAccount)
     creditsSpent = transaction.getPayedTransactions(playerAccount)
     userInfo = CustomUser.objects.filter(id = request.user.id)
-    return render(request, "player/playerActions.html",{
-        "upcomingTournaments":upcomingTournaments, 
-        "previousTournaments":previousTournaments,
-        "creditsRecieved":creditsRecieved,
-        "creditsSpent":creditsSpent,
-        "userInfo":userInfo,
-        "playerAccount":playerAccount,
-        "playerCredits":playerCredits,
-    })
+    if request.method == 'POST':
+        request.session['playerID'] = userInfo.id
+        return redirect('playerEdit')
+    else:
+        return render(request, "player/playerActions.html",{
+            "upcomingTournaments":upcomingTournaments, 
+            "previousTournaments":previousTournaments,
+            "creditsRecieved":creditsRecieved,
+            "creditsSpent":creditsSpent,
+            "userInfo":userInfo,
+            "playerAccount":playerAccount,
+            "playerCredits":playerCredits,
+        })
 
 @login_required
 @user_passes_test(shop_test,login_url='/', redirect_field_name=None)
@@ -261,3 +265,11 @@ def authorizeTransaction(request):
             'shop':curShop,
         })
 
+@login_required
+@user_passes_test(player_test)
+def playerEdit(request):
+    if request.session['playerID']:
+        editUser = CustomUser.objects.filter(id=request.session['playerID'])[0]
+
+    else:
+        return redirect('home')

@@ -60,3 +60,13 @@ class pinCreation(forms.Form):
                 ) 
             elif Account_Pin.isnumeric() == False:
                 raise forms.ValidationError("The PIN must be numeric.") 
+
+class userEditForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ('email', 'first_name', 'last_name','phoneNumber')
+
+class playerEditForm(forms.ModelForm):
+    class Meta: 
+        model = player
+        fields = ('homeCourse', 'address')

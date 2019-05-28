@@ -12,8 +12,14 @@
         <div class="nameFields">
         {% for field in user_form %}
             <p>{{ field.label_tag }} {{ field }}</p>
+            <p>{{field.errors}}</p>
         {% endfor %}
             <p>{{formset.as_p}}</p>
+            {% for error in formset.non_field_errors %}
+              <div class="alert alert-danger">
+                  <strong>{{ error|escape }}</strong>
+              </div>
+            {% endfor %}
             <button type="submit">Register</button>
         </div>
       </div>   

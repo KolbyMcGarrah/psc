@@ -47,3 +47,6 @@ select{
 .logout{
     display:none;
 }
+.errorlist{
+    color:white;
+}
