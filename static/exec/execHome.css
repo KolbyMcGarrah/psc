@@ -1,8 +1,44 @@
+.tab {
+    color:white;
+    overflow: hidden;
+    border: 1px solid #005B5E;
+    background-color:#00989E;
+  }
+.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+}
+  
+.tab button:hover {
+    background-color: #00E2EA;
+}
+  
+.tab button.active {
+    background-color: 00A4AB;
+  }
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;   
+}
 main{
     text-align:center;
 }
+p{
+    font-size:20px;
+}
 h1{
     margin-bottom:20px;
+}
+h2{
+    text-decoration:underline;
 }
 table{
     margin:0 auto;
@@ -10,6 +46,7 @@ table{
 td, tr, th{
     padding: 10px;
     text-align:center;
+    font-size:20px;
 }
 th{
     border:none;
@@ -21,4 +58,30 @@ thead{
 }
 tr{
     height:60px;
+}
+.reportHead{
+    background-color:transparent;
+    color:black;
+    border:none;
+    border-bottom:1px solid black;
+    padding:0px;
+}
+.reportHead tr{
+    height:20px;
+    padding:0px;
+}
+.reportRow{
+    height:20px;
+    padding:0px;
+}
+.reports{
+    display: grid;
+    grid-template-columns:50% 50%;
+    border: 2px solid black;
+}
+.reportItem{
+    max-height:250px;
+}
+.sectionTitle{
+    font-size:48px;
 }

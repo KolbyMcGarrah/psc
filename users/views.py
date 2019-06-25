@@ -175,8 +175,20 @@ def execHome(request):
     user = request.user
     curSection = user.execFields.section
     sectionCredits = credits.getSectionCredits(curSection)
+    totalSectionCredits = credits.totalSectionCredits(curSection)
+    expiringSectionCredits = credits.expiringSecCredits(curSection)
+    expiredSectionCredits = credits.expiredSecCredits(curSection)
+    activeSecCredits = credits.activeSecCredits(curSection)
+    mostActive = tournament.getMostActiveShops(curSection, 3)
+    leastActive = tournament.getLeastActiveShops(curSection, 3)
     return render(request, "exec/execHome.html", {
         "sectionCredits":sectionCredits,
+        "totalCredits":totalSectionCredits,
+        "expiringCredits":expiringSectionCredits,
+        "expiredCredits":expiredSectionCredits,
+        "activeCredits":activeSecCredits,
+        "mostActive":mostActive,
+        "leastActive":leastActive
     })
 
 @login_required

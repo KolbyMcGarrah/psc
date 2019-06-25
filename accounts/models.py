@@ -183,6 +183,34 @@ class credits(models.Model):
             credit.status = 2
             credit.save()
 
+    def totalSectionCredits(sec):
+        secCredits = credits.getSectionCredits(sec)
+        total = 0.00
+        for credit in secCredits:
+            total += float(credit.credit_amount)
+        return total
+
+    def activeSecCredits(sec):
+        creditSet = credits.objects.filter(source__account_owner__userShop__section=sec,status=1)
+        total = 0.00
+        for credit in creditSet:
+            total += float(credit.credit_amount)
+        return total    
+
+    def expiringSecCredits(sec):
+        creditSet = credits.objects.filter(source__account_owner__userShop__section=sec,status=2)
+        total = 0.00
+        for credit in creditSet:
+            total += float(credit.credit_amount)
+        return total
+    
+    def expiredSecCredits(sec):
+        creditSet = credits.objects.filter(source__account_owner__userShop__section=sec,status=3)
+        total = 0.00
+        for credit in creditSet:
+            total += float(credit.credit_amount)
+        return total
+
 class BillingEvent(models.Model):
     event_status = ((1,'awaiting_approval'),(2,'not approved'),(3,'approved'),(4,'complete'))
     BillingEventID = models.AutoField(primary_key = True)

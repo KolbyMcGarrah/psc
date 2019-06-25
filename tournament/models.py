@@ -1,5 +1,5 @@
 from django.db import models
-from users.models import player, proShop
+from users.models import player, proShop, execUser
 from accounts.models import account, transaction
 
 # Create your models here.
@@ -67,6 +67,32 @@ class tournament (models.Model):
             return 'Success'
         else:
             return 'Purchase Funds'
+    
+    def shopTournCount(curShop):
+        return tournament.objects.filter(shop = curShop).count()
+    
+    def zipShopInfo(shopSet):
+        zipped = {}
+        for curShop in shopSet:
+            zipped[str(curShop.shop_name)] = tournament.shopTournCount(curShop)
+        return zipped
+
+    def getMostActiveShops(sec, limit):
+        secShops = proShop.getSectionShops(sec)
+        unsorted = tournament.zipShopInfo(secShops)
+        sorted_shops = sorted(unsorted.items(), key=lambda kv: kv[1], reverse = True)
+        if limit < len(sorted_shops):
+            limit = len(sorted_shops)
+        return sorted_shops[:limit]
+    
+    def getLeastActiveShops(sec, limit):
+        secShops = proShop.getSectionShops(sec)
+        unsorted = tournament.zipShopInfo(secShops)
+        sorted_shops = sorted(unsorted.items(), key=lambda kv: kv[1])
+        if limit < len(sorted_shops):
+            limit = len(sorted_shops)
+        return sorted_shops[:limit -1]
+
         
 class playerResults (models.Model): 
     flight_choices = ((1,'Flight 1'), (2,'Flight 2'), (3,'Flight 3'), (4,'Flight 4'), (5,'Flight 5'), (6,'Flight 6'), (7,'Flight 7'), (8,'Flight 8'),
@@ -109,3 +135,38 @@ class playerResults (models.Model):
                 results.append(field)
         return results
 
+class PGA_Event (models.Model):
+    user_choices = ((1,'active'), (2,'abandoned'), (3,'in_progress'), (4,'complete'))
+    tournament_id = models.AutoField(primary_key = True)
+    tournament_name = models.CharField(max_length = 50) 
+    Section = models.ForeignKey(execUser, related_name='Section', on_delete=models.CASCADE)
+    players = models.ManyToManyField(
+        player, 
+        through='results', 
+        through_fields=('PGA_Event','player')
+        )
+    number_of_players = models.PositiveIntegerField(null=True, default=0)
+    created_on = models.DateField(auto_now_add = True)
+    last_updated = models.DateField(auto_now = True)
+    tournament_date = models.DateField()
+    prize_pool = models.DecimalField(max_digits=11,decimal_places=2, blank=True, null=True, default = 0.00)
+    host_shop = models.ForeignKey(proShop, related_name='host',on_delete=models.CASCADE)
+    status = models.PositiveSmallIntegerField(
+                  choices=user_choices,
+                  default=1)
+
+class results (models.Model):
+    flight_choices = ((1,'Flight 1'), (2,'Flight 2'), (3,'Flight 3'), (4,'Flight 4'), (5,'Flight 5'), (6,'Flight 6'), (7,'Flight 7'), (8,'Flight 8'),
+                     (9,'Flight 9'), (10,'Flight 10'))
+    division_choices = ((1,'Senior'), (2,'Women'), (3,'Junior'),(4,'Men'))
+    PGA_Event = models.ForeignKey(PGA_Event, related_name = 'eventSet',on_delete=models.CASCADE)
+    player = models.ForeignKey(player, related_name='eventPlayer', on_delete=models.CASCADE)
+    amount_won = models.DecimalField(max_digits=11,decimal_places=2, blank=True, null=True, default = 0.00)
+    position = models.PositiveIntegerField(blank=True, null=True, default = '0')
+    flight = models.PositiveSmallIntegerField(
+                  choices=flight_choices,
+                  default=1)
+    division = models.PositiveSmallIntegerField(
+                  choices=division_choices,
+                  default=1)
+    added_on = models.DateField(auto_now_add = True)

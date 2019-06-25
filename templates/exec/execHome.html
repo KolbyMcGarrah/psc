@@ -2,29 +2,100 @@
 {% load static %}
 {% block css %}
     <link rel="stylesheet" type="text/css" href="{% static 'exec/execHome.css' %}">
+    <script src="{% static 'exec/execJS.js' %}"></script>
 {% endblock %}
 {% block content %}
-<h1>{{ request.user.execFields.get_section_display }} Section Total Credits</h1>
-<table>
-    <thead>
-        <th>Credit Number</th>
-        <th>Credit Owner</th>
-        <th>Credit Amount</th>
-        <th>Credit Date Assigned</th>
-        <th>Credit Expiration Date</th>
-        <th>Credit Source</th>
-    </thead>
-    <tbody>
-        {% for result in sectionCredits %}
-        <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ result.owner.account_owner.username }}</td>
-                <td>{{ result.credit_amount }}</td>
-                <td>{{ result.date_assigned }}</td>
-                <td>{{ result.expiration_date }}</td>
-                <td>{{ result.source.account_owner.userShop.shop_name }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<h1 class='sectionTitle'>{{ request.user.execFields.get_section_display }} Section</h1>
+<div class="tab">
+        <button class="tablinks" onclick="openTab(event, 'Reports')">Reports</button>
+        <button class="tablinks" onclick="openTab(event, 'Credit Break Down')">Credit Break Down</button>
+        <button class='tablinks' onclick="openTab(event, 'Tournaments')">Tournaments</button>
+</div>
+<div id="Reports" class="tabContent">
+    <h1 class='reportTitle'>Credit Reports</h1>
+    <section class = 'reports'>
+        <div class = 'reportItem'>
+            <h2>Total Credits in Section</h2>
+            <p>Total Credits: {{totalCredits}}</p>
+        </div>
+        <div class = 'reportItem'>
+                <h2>Total Active Credits in Section</h2>
+                <p>Active Credits: {{activeCredits}}</p>
+        </div>
+        <div class = 'reportItem'>
+            <h2>Total Expiring Credits in Section</h2>
+            <p>Expiring Credits: {{expiringCredits}}</p>
+        </div>
+        <div class = 'reportItem'>
+            <h2>Total Expired in Section</h2>
+            <p>Expired Credits: {{expiredCredits}}</p>
+        </div>
+    </section>
+    <h1 class='reportTitle'>Shop Reports</h1>
+    <section class = 'reports'>
+        <div class = 'reportItem'>
+            <h2>Most Active Pro Shops</h2>
+            <table class = 'reportTable'>
+                <thead class='reportHead'>
+                    <th>Shop Name</th>
+                    <th>Number of Tournaments</th>
+                </thead>
+                <tbody class='reportBody'>
+                {% for shop in mostActive %}
+                <tr class='reportRow'>
+                    <td class='reportColumn'>{{shop.0}}</td>
+                    <td class='reportColumn'>{{shop.1}}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class = 'reportItem'>
+            <h2>Least Active Pro Shops</h2>
+            <table class = 'reportTable'>
+                    <thead class='reportHead'>
+                        <th>Shop Name</th>
+                        <th>Number of Tournaments</th>
+                    </thead>
+                    <tbody class='reportBody'>
+                    {% for shop in leastActive %}
+                    <tr class='reportRow'>
+                        <td class='reportColumn'>{{shop.0}}</td>
+                        <td class='reportColumn'>{{shop.1}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+        </div>
+    </section>
+</div>
+<div id="Credit Break Down" class="tabContent">
+    <h1>Credit Break Down</h1>
+    <table>
+        <thead>
+            <th>Credit Number</th>
+            <th>Credit Owner</th>
+            <th>Credit Amount</th>
+            <th>Credit Date Assigned</th>
+            <th>Credit Expiration Date</th>
+            <th>Credit Source</th>
+            <th>Credit Status</th>
+        </thead>
+        <tbody>
+            {% for result in sectionCredits %}
+            <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ result.owner.account_owner.username }}</td>
+                    <td>{{ result.credit_amount }}</td>
+                    <td>{{ result.date_assigned }}</td>
+                    <td>{{ result.expiration_date }}</td>
+                    <td>{{ result.source.account_owner.userShop.shop_name }}</td>
+                    <td>{{ result.get_status_display }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div id="Tournaments" class="tabContent">
+</div>
 {% endblock %}
