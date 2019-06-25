@@ -21,3 +21,7 @@ class playerResultForm(forms.ModelForm):
         exclude = ('player','tournament')
 
 playerResultFormSet = modelformset_factory(playerResults, form=playerResultForm, extra=0)
+
+class calcForm(forms.Form):
+    Estimated_Players = forms.IntegerField()
+    

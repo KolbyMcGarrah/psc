@@ -74,6 +74,9 @@ class proShop (models.Model):
     chnge_timestamp = models.DateField(auto_now = True)
     def __str__(self):
         return self.shop_name
+
+    def getSectionShops(sec):
+        return proShop.objects.filter(section=sec)
         
 class execUser(models.Model):
     section_options = ((1,'Alabama'),(2,'Colorado'),(3,'Carolinas'),(4,'Georgia'),(5,'Central New York'),(6,'Illinois'),(7,'Connecticut'),(8,'Iowa'),(9,'Gateway'),(10,'Metropolitan NY'),
