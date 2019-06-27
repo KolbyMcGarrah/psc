@@ -45,7 +45,6 @@ def updateTournament(request, id):
     playerInlineFormSet = inlineformset_factory(CustomUser, player, fields = ('address','homeCourse'),can_delete=False) #add player form
     tournamentPlayers = playerResults.objects.filter(tournament = curTournament)
     if request.method == "POST":
-        print('Posting')
         postAction = request.POST['action']
         print(postAction)
         if postAction == 'addPlayer': 
@@ -60,8 +59,7 @@ def updateTournament(request, id):
                 "user_form": user_form,
                 "formset": formset,
             })
-        elif postAction == 'savePlayer': 
-            print('saving player')
+        elif postAction == 'savePlayer':
             user_form = userForm(request.POST)
             formset = playerInlineFormSet(request.POST, request.FILES)
             if user_form.is_valid():
@@ -86,9 +84,7 @@ def updateTournament(request, id):
                         'tournamentPlayers': tournamentPlayers,
                     })
                 else:
-                    print(formset.errors)
                     response = HttpResponse(status=500 , reason='This didnt work')
-                    print 
                     return response
 
         elif 'remove' in postAction:
@@ -113,7 +109,6 @@ def updateTournament(request, id):
             playerSearch = existingPlayer(request.POST)
             if playerSearch.is_valid():
                 fName = request.POST['First_Name']
-                print(fName)
                 lName = request.POST['Last_Name']
                 results = CustomUser.objects.filter(first_name = fName, last_name = lName, userType=2)
                 if not results: 

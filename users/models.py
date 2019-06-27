@@ -55,6 +55,20 @@ class player (models.Model):
         curPlayer = player.userPlayer
         playerPIN = curPlayer.pin
         return pbkdf2_sha256.verify(Pin, playerPIN)
+    
+    def searchPlayer(first,last):
+        if first and last:
+            playerSet = player.objects.filter(user__first_name__icontains = first, user__last_name__icontains = last, user__userType=2)
+        elif first:            
+            playerSet = player.objects.filter(user__first_name__icontains = first, user__userType=2)
+        elif last:            
+            playerSet = player.objects.filter(user__last_name__icontains = last, user__userType=2)
+        else:
+            playerSet = player.objects.all()
+        return playerSet
+    
+    def getPlayerFromID(id):
+        return player.objects.get(user__id = id)
 
 class proShop (models.Model):
     section_options = ((1,'Alabama'),(2,'Colorado'),(3,'Carolinas'),(4,'Georgia'),(5,'Central New York'),(6,'Illinois'),(7,'Connecticut'),(8,'Iowa'),(9,'Gateway'),(10,'Metropolitan NY'),
@@ -89,3 +103,6 @@ class execUser(models.Model):
     section = models.PositiveSmallIntegerField(
                   choices=section_options,
                   default=1)
+    
+    def __str__(self):
+        return self.user.username

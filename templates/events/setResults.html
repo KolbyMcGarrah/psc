@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'tournament/confirm.css' %}">
+{% endblock %}
+{% block content %}
+<div class='tournDetails'>
+    <h2>Tournament Information</h2>
+    <p>Event Name: {{curEvent.event_name}}</p>
+    <p>Event Data: {{curEvent.event_date}}</p>
+    <p>Host: {{curEvent.host_shop}}</p>
+    <p>Prize: {{curEvent.prize_pool}}</p>
+</div>
+<form method='post'> 
+        <h2>Event Roster</h2>
+        <table>                
+            <tbody>
+                <td class='innerTable'>
+                    <table >
+                        <thead>
+                                <th>Player Number</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Email</th>
+                                <th>Phone Number</th>
+                        </thead>
+                        {% for player in eventPlayers %}
+                        <tr class='rowData'>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ player.player.user.first_name }}</td>
+                            <td>{{ player.player.user.last_name }}</td>
+                            <td>{{ player.player.user.email }}</td>
+                            <td>{{ player.player.user.phoneNumber }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </td>
+                <td class='outerTable'>
+                    <table class="formTable">
+                        <thead>
+                            <th>Position</th>
+                            <th>Amount Won</th>                                
+                            <th>Division</th>
+                            <th>Championship Flight</th>
+                        </thead>
+                        {% csrf_token %}
+                        {{ formset.management_form }}
+                        {% for form in formset %}
+                        <tr class='rowData'>
+                            <td>{{ form.position }}</td>
+                            <td>{{ form.amount_won }}</td>
+                            <td>{{ form.division  }}</td>
+                            <td>{{ form.flight }}</td>
+                        </tr> 
+                        {{ form.id }}
+                        {% endfor %}
+                    </table>
+                </td>  
+            </tbody>
+        </table>
+    <button type='submit' class='btn btn-success'>Submit Results</button>
+</form>
+{% endblock %}

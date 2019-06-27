@@ -1,7 +1,7 @@
 from django.db import models
 from users.models import CustomUser, proShop, player, execUser
 from datetime import datetime, date, timedelta
-
+from django.db.models import Q
 # Create your models here.
 class account(models.Model):
     account_choices = ((1,'player'), (2,'shop'), (3,'buyer'), (4,'AmAd'))
@@ -41,7 +41,7 @@ class account(models.Model):
         fundedAccount.save()
         AmAdUsr = CustomUser.objects.filter(username='AmAd')[0]
         transaction.log_transaction(AmAdUsr.userAccount,fundedAccount,amount,"Purchasing Credits")
-         
+    
 
     def createPlayerAccount(user):
         curAccount = account()
@@ -146,7 +146,7 @@ class credits(models.Model):
         return credits.objects.filter(owner=curUser.userAccount)
         
     def getSectionCredits(curSection):
-        sectionCredits = credits.objects.filter(source__account_owner__userShop__section = curSection)
+        sectionCredits = credits.objects.filter(Q(source__account_owner__userShop__section = curSection)|Q(source__account_owner__execFields__section = curSection))
         return sectionCredits
     
     def spendCredits(source, destination, amount, reason):
@@ -191,21 +191,21 @@ class credits(models.Model):
         return total
 
     def activeSecCredits(sec):
-        creditSet = credits.objects.filter(source__account_owner__userShop__section=sec,status=1)
+        creditSet = credits.objects.filter(Q(source__account_owner__userShop__section = sec)|Q(source__account_owner__execFields__section = sec),status=1)
         total = 0.00
         for credit in creditSet:
             total += float(credit.credit_amount)
         return total    
 
     def expiringSecCredits(sec):
-        creditSet = credits.objects.filter(source__account_owner__userShop__section=sec,status=2)
+        creditSet = credits.objects.filter(Q(source__account_owner__userShop__section = sec)|Q(source__account_owner__execFields__section = sec),status=2)
         total = 0.00
         for credit in creditSet:
             total += float(credit.credit_amount)
         return total
     
     def expiredSecCredits(sec):
-        creditSet = credits.objects.filter(source__account_owner__userShop__section=sec,status=3)
+        creditSet = credits.objects.filter(Q(source__account_owner__userShop__section = sec)|Q(source__account_owner__execFields__section = sec),status=3)
         total = 0.00
         for credit in creditSet:
             total += float(credit.credit_amount)

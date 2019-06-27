@@ -10,6 +10,7 @@ from tournament.models import *
 from tournament.forms import existingPlayer
 from accounts.models import account, transaction, credits, BillingEvent
 from django.forms import inlineformset_factory, BaseInlineFormSet
+from pga_events.models import PGA_Event as pg, results as res
 import re
 
 def shop_test(user):
@@ -181,15 +182,42 @@ def execHome(request):
     activeSecCredits = credits.activeSecCredits(curSection)
     mostActive = tournament.getMostActiveShops(curSection, 3)
     leastActive = tournament.getLeastActiveShops(curSection, 3)
-    return render(request, "exec/execHome.html", {
-        "sectionCredits":sectionCredits,
-        "totalCredits":totalSectionCredits,
-        "expiringCredits":expiringSectionCredits,
-        "expiredCredits":expiredSectionCredits,
-        "activeCredits":activeSecCredits,
-        "mostActive":mostActive,
-        "leastActive":leastActive
-    })
+    upcomingEvents = pg.upcomingEvents(user.execFields)
+    eventHistory = pg.pastEvents(user.execFields)
+    print(eventHistory)
+    if request.method == "POST":
+        postRequest = request.POST['action']
+        if 'update' in postRequest:
+            eventID = re.match(r"update(.*)", postRequest)
+            request.session['event_id'] = eventID.group(1)
+            return redirect("update")
+        elif 'remove' in postRequest:
+            eventID = re.match(r"remove(.*)", postRequest)
+            pg.removeEvent(eventID.group(1))
+            upcomingEvents = pg.upcomingEvents(user.execFields)
+            return render(request, "exec/execHome.html", {
+                "sectionCredits":sectionCredits,
+                "totalCredits":totalSectionCredits,
+                "expiringCredits":expiringSectionCredits,
+                "expiredCredits":expiredSectionCredits,
+                "activeCredits":activeSecCredits,
+                "mostActive":mostActive,
+                "leastActive":leastActive,
+                "upcomingEvents":upcomingEvents,
+                "eventHistory":eventHistory,
+            })
+    else:
+        return render(request, "exec/execHome.html", {
+            "sectionCredits":sectionCredits,
+            "totalCredits":totalSectionCredits,
+            "expiringCredits":expiringSectionCredits,
+            "expiredCredits":expiredSectionCredits,
+            "activeCredits":activeSecCredits,
+            "mostActive":mostActive,
+            "leastActive":leastActive,
+            "upcomingEvents":upcomingEvents,
+            "eventHistory":eventHistory
+        })
 
 @login_required
 @user_passes_test(shop_test,login_url='/', redirect_field_name=None)
