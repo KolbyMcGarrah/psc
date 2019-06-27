@@ -1,0 +1,23 @@
+{% load static %}
+<!-- Load Bootstrap-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="{% static 'events/confirmPrize.css' %}">
+<link rel="shortcut icon" type="image/png" href="{% static '/images/blackbutton.png' %}">
+<div id="myModal" class="modal">
+    <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Prize Discrepancy</h2>
+            </div>
+            <div class="modal-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <h3>The amount in the tournament Prize Pool does not match the amount being assigned as winnings.</h3>
+                    <h4>Select "Confirm" to update the Prize Pool to {{amount}}.</h4>
+                    <h4>Select "Cancel" to adjust the amount distributed, and keep the Prize Pool as {{estimate}}</h4>
+                    <button class='btn btn-success' type='submit' name='action' value='Confirm'>Confirm</button>
+                    <button class='btn btn-warning' type='submit' name='action' value='adjust'>Cancel</button>
+                </form>
+            </div>
+        </div>
+</div>

@@ -9,7 +9,7 @@
 <div class="tab">
         <button class="tablinks" onclick="openTab(event, 'Reports')">Reports</button>
         <button class="tablinks" onclick="openTab(event, 'Credit Break Down')">Credit Break Down</button>
-        <button class='tablinks' onclick="openTab(event, 'Tournaments')">Tournaments</button>
+        <button class='tablinks' onclick="openTab(event, 'Event')">Events</button>
 </div>
 <div id="Reports" class="tabContent">
     <h1 class='reportTitle'>Credit Reports</h1>
@@ -89,13 +89,71 @@
                     <td>{{ result.credit_amount }}</td>
                     <td>{{ result.date_assigned }}</td>
                     <td>{{ result.expiration_date }}</td>
+                    {% if result.source.account_owner.userShop.shop_name %}
                     <td>{{ result.source.account_owner.userShop.shop_name }}</td>
+                    {% else %}
+                    <td>{{ result.source.account_owner.execFields.get_section_display }} Section</td>
+                    {% endif %}
                     <td>{{ result.get_status_display }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
-<div id="Tournaments" class="tabContent">
+<div id="Event" class="tabContent">
+        <h1>Upcoming Events</h1>
+        <table>
+            <thead>
+                <th>Number</th>
+                <th>Name</th>
+                <th>Date</th>
+                <th>Host Shop</th>
+                <th>Prize Pool</th>
+                <th>Status</th>
+                <th>Update</th>
+                <th>Remove</th>
+            </thead>
+            <tbody>
+                <form method='POST'>
+                    {% csrf_token %}
+                    {% for event in upcomingEvents %}
+                    <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ event.event_name }}</td>
+                            <td>{{ event.event_date }}</td>
+                            <td>{{ event.host_shop }}</td>
+                            <td>{{ event.prize_pool }}</td>
+                            <td>{{ event.get_status_display }}</td>
+                            <td><button type='submit' class='btn btn-primary' name='action' value='update{{event.event_id}}'>Update</button></td>
+                            <td><button type='submit' class='btn btn-danger' name='action' value='remove{{event.event_id}}'>Remove</td>
+                    </tr>
+                    {% endfor %}
+                </form>
+            </tbody>
+        </table>
+        <h1>Previous Events</h1>
+        <table>
+            <thead>
+                <th>Number</th>
+                <th>Name</th>
+                <th>Date</th>
+                <th>Host Shop</th>
+                <th>Prize Pool</th>
+                <th>Status</th>
+            </thead>
+            <tbody>
+                    {% for events in eventHistory %}
+                    <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ events.event_name }}</td>
+                            <td>{{ events.event_date }}</td>
+                            <td>{{ events.host_shop }}</td>
+                            <td>{{ events.prize_pool }}</td>
+                            <td>{{ events.get_status_display }}</td>
+                    </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+    <a href= "{% url 'schedule' %}" class = 'btn btn-primary'>Schedule an Event</a>
 </div>
 {% endblock %}

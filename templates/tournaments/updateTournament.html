@@ -69,7 +69,7 @@
                                 <td>{{ player.userPlayer.homeCourse }}</td>
                                 <td>{{ player.email }}</td>
                                 <td>{{ player.phoneNumber }}</td>
-                                <td class='buttonCol'><button  type='submit' name='action' value="addTo {{ player.id }}"  class="btn">Add Player to Tournament</button></td>
+                                <td class='buttonCol'><button  type='submit' name='action' value="addTo {{ player.id }}"  class="btn btn-primary">Add Player to Tournament</button></td>
                             </tr>                    
                         {% endfor %}
                     </tbody>
@@ -109,7 +109,7 @@
                 </tr>
             {% endfor %}    
             </table>
-            <button class='findPlayer btn' type='submit' name='action' value='findPlayer'>Find Player</button>
+            <button class='findPlayer btn btn-primary' type='submit' name='action' value='findPlayer'>Find Player</button>
         </form>
     {% endif %}
     <form method = 'post'>{% csrf_token %}

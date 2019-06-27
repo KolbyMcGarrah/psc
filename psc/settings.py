@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'pages',
     'tournament',
     'accounts',
+    'pga_events',
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'
