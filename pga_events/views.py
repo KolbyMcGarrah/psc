@@ -50,10 +50,12 @@ def update(request):
                 first = search.cleaned_data['First_Name']
                 last = search.cleaned_data['Last_Name'] 
                 results = ply.searchPlayer(first,last)
+            searchForm = searchPlayer()
             return render(request,'events/update.html',{
                 'results':results,
                 'Event':curEvent,                
                 'playerResults':playerResults,
+                'searchForm':searchForm,
             })
         elif 'remove' in postRequest:
             playerID = re.match(r"remove(.*)", postRequest)
