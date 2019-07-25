@@ -9,6 +9,7 @@ from .forms import tournamentForm, existingPlayer, playerResultFormSet
 from accounts.models import account, transaction
 from users.models import player, CustomUser, proShop
 from users.forms import playerCreationForm, userForm
+from pga_events.forms import searchPlayer
 import re 
  
 def shop_test(user):
@@ -97,20 +98,18 @@ def updateTournament(request, id):
                 'tournamentPlayers': tournamentPlayers,
             }) 
         elif postAction == 'addExisting':
-            print('Adding Existing Player')
-            existingForm = existingPlayer()
+            searchForm = searchPlayer()
             return render(request, 'tournaments/updateTournament.html',{
                 'curTournament' : curTournament,
-                'existingForm' : existingForm,
+                'existingForm' : searchForm,
                 'tournamentPlayers': tournamentPlayers,
             })
         elif postAction == 'findPlayer':
-            print('Finding Player')
-            playerSearch = existingPlayer(request.POST)
+            playerSearch = searchPlayer(request.POST)
             if playerSearch.is_valid():
-                fName = request.POST['First_Name']
-                lName = request.POST['Last_Name']
-                results = CustomUser.objects.filter(first_name = fName, last_name = lName, userType=2)
+                first = request.POST['First_Name']
+                last = request.POST['Last_Name']
+                results = player.searchPlayer(first,last)
                 if not results: 
                     results="None"
                 print('Players Found' + str(results))

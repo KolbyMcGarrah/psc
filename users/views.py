@@ -11,6 +11,7 @@ from tournament.forms import existingPlayer
 from accounts.models import account, transaction, credits, BillingEvent
 from django.forms import inlineformset_factory, BaseInlineFormSet
 from pga_events.models import PGA_Event as pg, results as res
+from pga_events.forms import searchPlayer
 import re
 
 def shop_test(user):
@@ -79,7 +80,8 @@ def shopActions(request):
     shopAccount = account.getAccount(request.user)
     creditsRecieved = transaction.getRecievedTransactions(shopAccount)
     creditsSpent = transaction.getPayedTransactions(shopAccount)
-    searchForm = existingPlayer()
+    approvedEvents = BillingEvent.getApprovedEvents(request.user)
+    searchForm = searchPlayer()
     if request.method == "POST":
         postAction = request.POST['action']
         print(postAction)
@@ -91,7 +93,7 @@ def shopActions(request):
             print('removing')
             tournamentID = re.match(r"remove\s(\d+)", postAction)
             curTournament = tournament.objects.get(tournament_id = tournamentID.group(1))
-            curTournament.active = False
+            curTournament.status = 2 #set the tournament status to abandoned
             curTournament.save()
             return render(request, "proShop/shopActions.html", {
                 "shopAccount":shopAccount,
@@ -104,9 +106,11 @@ def shopActions(request):
             })
         elif postAction == 'search':
             print('searching for a player')
-            form = existingPlayer(request.POST)
+            form = searchPlayer(request.POST)
             if form.is_valid():
-                playerResults = CustomUser.objects.filter(first_name = form.cleaned_data['First_Name'], last_name = form.cleaned_data['Last_Name'])
+                first = request.POST['First_Name']
+                last = request.POST['Last_Name']
+                playerResults = player.searchPlayer(first,last)
                 return render(request, "proShop/shopActions.html", {
                     "shopAccount":shopAccount,
                     "activeTournaments":activeTournaments,
@@ -130,6 +134,7 @@ def shopActions(request):
             "expiredTournaments":expiredTournaments,
             "userInfo":userInfo,
             "searchForm":searchForm,
+            "events":approvedEvents,
         })
 @login_required
 @user_passes_test(player_test,login_url='/', redirect_field_name=None)
@@ -257,7 +262,7 @@ def createPin(request):
         if pinForm.is_valid():
             player.updatePin(currentUser, pinForm.cleaned_data['Account_Pin'])
             del request.session['userID']
-            return redirect('home')
+            return redirect('login')
         else:
             return render(request, 'player/createPin.html',{
                 'form':pinForm,

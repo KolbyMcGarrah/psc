@@ -10,6 +10,7 @@ from pga_events.models import PGA_Event as pg, results as res
 import stripe
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
+client_id = settings.STRIPE_CLIENT_ID
 
 def shop_test(user):
     return CustomUser.isShop(user)
@@ -84,3 +85,10 @@ def purchaseCredits(request):
         return render(request, "account/purchaseCredits.html",{
             "amount":amount,
         })
+
+def connectStripe(request):
+    return render(request, "account/connectStripe.html")
+
+def completeEvents(request):
+    user = request.user
+    return render(request, "account/completeEvents")

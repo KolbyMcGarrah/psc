@@ -63,13 +63,13 @@
                         {% for player in results %}
                             <tr>     
                                 <td>{{ forloop.counter }}</td>
-                                <td>{{ player.username }}</td>
-                                <td>{{ player.first_name }}</td>
-                                <td>{{ player.last_name }}</td>
-                                <td>{{ player.userPlayer.homeCourse }}</td>
-                                <td>{{ player.email }}</td>
-                                <td>{{ player.phoneNumber }}</td>
-                                <td class='buttonCol'><button  type='submit' name='action' value="addTo {{ player.id }}"  class="btn btn-primary">Add Player to Tournament</button></td>
+                                <td>{{ player.user.username }}</td>
+                                <td>{{ player.user.first_name }}</td>
+                                <td>{{ player.user.last_name }}</td>
+                                <td>{{ player.homeCourse }}</td>
+                                <td>{{ player.user.email }}</td>
+                                <td>{{ player.user.phoneNumber }}</td>
+                                <td class='buttonCol'><button  type='submit' name='action' value="addTo {{ player.user.id }}"  class="btn btn-primary">Add Player to Tournament</button></td>
                             </tr>                    
                         {% endfor %}
                     </tbody>

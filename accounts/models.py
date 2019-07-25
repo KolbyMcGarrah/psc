@@ -13,6 +13,7 @@ class account(models.Model):
                     choices=account_choices,
                     default=1)
     account_owner = models.OneToOneField(CustomUser, related_name='userAccount', on_delete=models.CASCADE)
+    stripe_id = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return str(self.account_owner) + " Account"
@@ -90,6 +91,7 @@ class account(models.Model):
             return True
         else:
             return False
+   
 
     
 class transaction(models.Model): 
@@ -212,7 +214,7 @@ class credits(models.Model):
         return total
 
 class BillingEvent(models.Model):
-    event_status = ((1,'awaiting_approval'),(2,'not approved'),(3,'approved'),(4,'complete'))
+    event_status = ((1,'pending'),(2,'not approved'),(3,'approved'),(4,'complete'))
     BillingEventID = models.AutoField(primary_key = True)
     amount = models.DecimalField(max_digits=11, decimal_places=2, default=0.00)
     description = models.CharField(max_length=1000)
@@ -247,6 +249,9 @@ class BillingEvent(models.Model):
 
     def getEvents(shop):
         return shop.userAccount.shopBillingEvents
+    
+    def getPendingEvents(shop):
+        return BillingEvent.objects.filter(shop_account=shop.userAccount, status = 1)
     
     def getCompleteEvents(shop):
         return BillingEvent.objects.filter(shop_account=shop.userAccount, status = 4)
