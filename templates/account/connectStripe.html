@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block css %}
+{% endblock %}
+{% block content %}
+	<h3>We noticed that your Stripe account has not yet been setup or linked.</h3>
+	<h3>Please use the link below to create or link an existing Stripe account and then continue on with your transaction.</h3>
+	<a href="https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://stripe.com/connect/default/oauth/test&client_id=ca_FPXmhPuP9iXwzPmCuZRuj3EN3FFMHx7C&redirect_uri=localhost" class="btn btn-primary">Connect With Stripe</a>
+{% endblock %}

@@ -6,4 +6,5 @@ urlpatterns = [
     path('purchaseCredits/', views.purchaseCredits, name = 'purchaseCredits'),
     path('success/', views.successfulTransaction, name = 'successfulTransaction'),
     path('error/', views.failedTransaction, name = 'failedTransaction'),
+    path('connectStripe/', views.connectStripe, name = 'connectStripe'),
 ]

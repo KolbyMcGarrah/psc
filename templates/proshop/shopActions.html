@@ -97,6 +97,28 @@
     </div>
     <button class="accordion" onclick="openAccordion('bEvent')">Approve Purchases</button>
     <div id='bEvent' class='panel'>
+        <h3>Billing Events</h3>
+        <h4>Pending Transactions</h4>
+        <table>
+            <thead>
+                <th>Description</th>
+                <th>Date Created</th>
+                <th>Amount</th>
+                <th>Approve Event</th>
+                <th>Refund</th>
+            </thead>
+            {% for event in events %}
+            <tr>
+                <td>{{event.description}}</td>
+                <td>{{event.request_ts}}</td>
+                <td>{{event.amount}}</td>
+                <td><button class="btn btn-success">Approve Event</button></td>
+                <td><button class="btn btn-success">Refund Credits</button></td>
+            </tr>
+            {% endfor %}
+            <tr><button class="btn btn-success">Approve All</button></tr>
+        </table>
+        
     </div>
     <button class="accordion" onclick="openAccordion('credRec')">Credits Recieved</button>
     <div id='credRec' class='panel'>
@@ -163,13 +185,13 @@
                 <tbody>
                     {% for player in playerResults %}
                     <tr>
-                        <td>{{ player.username }}</td>
-                        <td>{{ player.first_name }}</td>
-                        <td>{{ player.last_name }}</td>
-                        <td>{{ player.email }}</td>
-                        <td>{{ player.phoneNumber }}</td>
-                        <td>{{ player.userAccount.current_balance }}</td>
-                        <td class='buttonCol'><button type='submit' name='action' value="spend {{player.id}}" class = "btn btn-success">Spend Credits</button></td>
+                        <td>{{ player.user.username }}</td>
+                        <td>{{ player.user.first_name }}</td>
+                        <td>{{ player.user.last_name }}</td>
+                        <td>{{ player.user.email }}</td>
+                        <td>{{ player.user.phoneNumber }}</td>
+                        <td>{{ player.user.userAccount.current_balance }}</td>
+                        <td class='buttonCol'><button type='submit' name='action' value="spend {{player.user.id}}" class = "btn btn-success">Spend Credits</button></td>
                     </tr>
                     {% endfor %}
                 </tbody>
