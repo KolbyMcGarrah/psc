@@ -1,6 +1,12 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\pga_events",
+    "\\templates",
+    "\\templates\\exec",
+    "\\tournament",
+    "\\users"
   ],
+  "SelectedNode": "\\users\\views.py",
   "PreviewInSolutionExplorer": false
 }

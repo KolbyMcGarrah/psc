@@ -81,7 +81,7 @@ class tournament (models.Model):
         secShops = proShop.getSectionShops(sec)
         unsorted = tournament.zipShopInfo(secShops)
         sorted_shops = sorted(unsorted.items(), key=lambda kv: kv[1], reverse = True)
-        if limit < len(sorted_shops):
+        if limit > len(sorted_shops):
             limit = len(sorted_shops)
         return sorted_shops[:limit]
     
@@ -89,7 +89,7 @@ class tournament (models.Model):
         secShops = proShop.getSectionShops(sec)
         unsorted = tournament.zipShopInfo(secShops)
         sorted_shops = sorted(unsorted.items(), key=lambda kv: kv[1],reverse=False)
-        if limit < len(sorted_shops):
+        if limit > len(sorted_shops):
             limit = len(sorted_shops)
         return sorted_shops[:limit -1]
 
