@@ -99,26 +99,28 @@
     <div id='bEvent' class='panel'>
         <h3>Billing Events</h3>
         <h4>Pending Transactions</h4>
-        <table>
-            <thead>
+        <form method="post">
+            {%csrf_token%}
+            <table>
+                <thead>
                 <th>Description</th>
                 <th>Date Created</th>
                 <th>Amount</th>
                 <th>Approve Event</th>
                 <th>Refund</th>
-            </thead>
-            {% for event in events %}
-            <tr>
-                <td>{{event.description}}</td>
-                <td>{{event.request_ts}}</td>
-                <td>{{event.amount}}</td>
-                <td><button class="btn btn-success">Approve Event</button></td>
-                <td><button class="btn btn-success">Refund Credits</button></td>
-            </tr>
-            {% endfor %}
-            <tr><button class="btn btn-success">Approve All</button></tr>
-        </table>
-        
+                </thead>
+                {% for event in events %}
+                <tr>
+                    <td>{{event.description}}</td>
+                    <td>{{event.request_ts}}</td>
+                    <td>{{event.amount}}</td>
+                    <td><button class="btn btn-success" name="action" value="approve{{ event.BillingEventID }}">Approve Event</button></td>
+                    <td><button class="btn btn-success">Refund Credits</button></td>
+                </tr>
+                {% endfor %}
+                <tr><button class="btn btn-success">Approve All</button></tr>
+            </table>
+        </form>
     </div>
     <button class="accordion" onclick="openAccordion('credRec')">Credits Recieved</button>
     <div id='credRec' class='panel'>

@@ -8,6 +8,21 @@ class userForm(UserCreationForm):
         model = CustomUser
         fields = ('username', 'email', 'first_name', 'last_name','phoneNumber')
 
+class tourneyUserForm(UserCreationForm):
+    """
+    A UserCreationForm with optional password inputs.
+    """
+    def __init__(self,*args,**kwargs):
+        super(tourneyUserForm, self).__init__(*args, **kwargs)
+        self.fields['password1'].required = False
+        self.fields['password2'].required = False
+        self.fields['password1'].widget = forms.HiddenInput()
+        self.fields['password2'].widget = forms.HiddenInput()
+    class Meta(UserCreationForm):
+        model = CustomUser
+        fields = ('username','email','first_name','last_name','phoneNumber')
+
+
 class CustomUserChangeForm(UserChangeForm): 
     class Meta:  
         model = CustomUser

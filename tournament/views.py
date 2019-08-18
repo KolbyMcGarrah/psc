@@ -8,8 +8,11 @@ from .models import tournament, playerResults
 from .forms import tournamentForm, existingPlayer, playerResultFormSet
 from accounts.models import account, transaction
 from users.models import player, CustomUser, proShop
-from users.forms import playerCreationForm, userForm
+from users.forms import playerCreationForm, userForm, tourneyUserForm
 from pga_events.forms import searchPlayer
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 import re 
  
 def shop_test(user):
@@ -51,7 +54,7 @@ def updateTournament(request, id):
         if postAction == 'addPlayer': 
             print('adding player')
             user = CustomUser()
-            user_form = userForm(instance=user) # setup a form for the parent
+            user_form = tourneyUserForm(instance=user) # setup a form for the parent
             formset = playerInlineFormSet(instance=user)
             print(user_form)
             return render(request, 'tournaments/updateTournament.html',{
@@ -61,10 +64,12 @@ def updateTournament(request, id):
                 "formset": formset,
             })
         elif postAction == 'savePlayer':
-            user_form = userForm(request.POST)
+            user_form = tourneyUserForm(request.POST)
             formset = playerInlineFormSet(request.POST, request.FILES)
-            if user_form.is_valid():
+            tempPass = CustomUser.objects.make_random_password()
+            if user_form.is_valid():               
                 created_user = user_form.save(commit=False)
+                created_user.set_password(tempPass)
                 formset = playerInlineFormSet(request.POST, request.FILES, instance=created_user)
                 if formset.is_valid():
                     created_user.userType=2
@@ -76,6 +81,14 @@ def updateTournament(request, id):
                     tournyPlayer.tournament = curTournament
                     tournyPlayer.player = created_user.userPlayer
                     tournyPlayer.save()
+                    #Set up email variables
+                    subject, from_email, to = 'Welcome to Amateur Advantage','NOREPLY@domain.com', created_user.email
+                    html_content = render_to_string('mail/tempPassWord.html', {'tempPassword':tempPass, "username":created_user.username, "name":created_user.first_name})
+                    text_content = strip_tags(html_content)
+                    email_msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+                    email_msg.attach_alternative(html_content, "text/html")
+                    email_msg.send()
+                    print(email_msg)
                     user_form = False
                     formset = False
                     return render(request, 'tournaments/updateTournament.html',{

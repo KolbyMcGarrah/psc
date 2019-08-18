@@ -265,6 +265,9 @@ class BillingEvent(models.Model):
         event.auth_attempt_counter = missCounter
         event.save()
         return missCounter
+    
+    def getEventByID(eventID):
+        return BillingEvent.objects.get(BillingEventID=eventID)
 
 
 

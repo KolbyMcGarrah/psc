@@ -124,7 +124,19 @@ def shopActions(request):
         elif 'spend' in postAction:
             print('spending')
             spendID = re.match(r"spend\s(\d+)", postAction)
-            return redirect('spendCredits', id=spendID.group(1))    
+            return redirect('spendCredits', id=spendID.group(1))
+
+        elif 'approve' in postAction:
+            approveID = re.match(r"approve(\d+)",postAction)
+            BillingEvent.completeEvent(BillingEvent.getEventByID(approveID.group(1)))
+            return render(request, "proShop/shopActions.html", {
+                    "shopAccount":shopAccount,
+                    "activeTournaments":activeTournaments,
+                    "expiredTournaments":expiredTournaments,
+                    "userInfo":userInfo,
+                    "creditsSpent":creditsSpent,
+                    "creditsRecieved":creditsRecieved,
+                    "searchForm":searchForm})
     else:
         return render(request, "proShop/shopActions.html", {
             "shopAccount":shopAccount,

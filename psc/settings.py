@@ -164,3 +164,16 @@ BRAINTREE_PRIVATE_KEY = 'af7353c37fb023f96ea98799c87caaf6'
 STRIPE_PUBLISHABLE_KEY = 'pk_test_y3aNGnrrQwW3InrwTnYfVNv100lSVzr9is'
 STRIPE_SECRET_KEY = 'sk_test_g3KOhgnD0bGjNSao09orZdjG004zrMC2NR'
 STRIPE_CLIENT_ID = 'ca_FPXmhPuP9iXwzPmCuZRuj3EN3FFMHx7C'
+
+#Set up emailing for Development. Will output to the console 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+#EMAIL TEST. Will send to actual emails
+#EMAIL_HOST = 'smtp.gmail.com'
+#EMAIL_HOST_USER = 'kolbymcgarrah@gmail.com'
+#EMAIL_USE_TLS = True
+#Enter your gmail PW from the ADMINS email entered above.
+#EMAIL_HOST_PASSWORD = '@Kbourne9'
+#EMAIL_PORT = 587
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
