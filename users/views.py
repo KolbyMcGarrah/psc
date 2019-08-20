@@ -95,7 +95,7 @@ def shopActions(request):
             curTournament = tournament.objects.get(tournament_id = tournamentID.group(1))
             curTournament.status = 2 #set the tournament status to abandoned
             curTournament.save()
-            return render(request, "proShop/shopActions.html", {
+            return render(request, "shopActions.html", {
                 "shopAccount":shopAccount,
                 "activeTournaments":activeTournaments,
                 "expiredTournaments":expiredTournaments,
