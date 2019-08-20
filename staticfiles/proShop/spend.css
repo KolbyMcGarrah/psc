@@ -1,0 +1,31 @@
+body{
+    background-color: #f7f8f9;
+    color: #6b7c93;    
+}
+main{
+    padding:50px 0;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px 0 #e6ebf1;
+    background-color: white;
+}
+table{
+    margin:50px auto;
+}
+td, tr, th{
+   padding: 10px;
+   text-align:center;
+}
+tbody tr{
+    border-top:1px solid black;
+}
+th{
+    text-align:center;
+    border:none;
+}
+form{
+    text-align:center;
+}
+h4, label{
+    margin:20px;
+}

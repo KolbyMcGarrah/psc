@@ -1,0 +1,52 @@
+header {
+    border-bottom: 2px solid rgb(0,56,94);
+}
+h1{
+    text-align:center;
+}
+.background{
+    background-image:url("./images/beachGolf.76a9a854a46d.jpg");
+    background-repeat:no-repeat;
+    padding:20px;
+    width:720px;
+    margin:20px auto;
+}
+.nameFields{
+    background-color: rgba(0,0,0,0.5);
+    padding:5% 10%;
+}
+.nameFields p {
+    color:white;
+    width:100%;
+    font-size:20px;
+    margin:20 auto;
+}
+.nameFields input{
+    margin-left:40px;
+    color:black;
+    width:250px;
+}
+button{
+    font-size:20px;
+    color:white;
+    background-color:rgb(0,152,158);
+    border:1px solid rgb(0,152,158);
+    width:110px;
+    height:40px;
+    border-radius:10px;
+}
+label{
+    width:230px;
+}
+select{
+    color:black;
+    width:250px;
+    margin-left:40px;
+    padding:2px;
+}
+.logout{
+    display:none;
+}
+.errorlist{
+    color:white;
+}
