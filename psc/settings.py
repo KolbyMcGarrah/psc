@@ -26,7 +26,7 @@ SECRET_KEY = 'k@ssz-b+x*2s3l%w)q1_!)*$g2@1eaa(4a3kq$hc)y^w)(a&$1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://amadtest-1.herokuapp.com/']
+ALLOWED_HOSTS = ['https://amadtest2.herokuapp.com/']
 
 
 # Application definition
