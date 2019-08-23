@@ -82,10 +82,13 @@
             {% csrf_token %}
             <table class='formTable'>  
                 {% for field in user_form %}
+                {% if field.name == 'password1' or field.name == 'password2' %}
+                {% else %}
                 <tr>
                     <th>{{ field.label_tag }}</td> 
                     <td>{{ field }}</td> 
-                </tr>       
+                </tr>   
+                {% endif %}    
                 {% endfor %}
                 {{ formset.as_table}}
                 <tr>
