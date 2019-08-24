@@ -2,11 +2,14 @@
   "ExpandedNodes": [
     "",
     "\\pga_events",
+    "\\psc",
     "\\templates",
     "\\templates\\exec",
+    "\\templates\\mail",
+    "\\templates\\player",
     "\\tournament",
     "\\users"
   ],
-  "SelectedNode": "\\users\\views.py",
+  "SelectedNode": "\\psc\\settings.py",
   "PreviewInSolutionExplorer": false
 }
