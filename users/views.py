@@ -95,7 +95,7 @@ def shopActions(request):
             curTournament = tournament.objects.get(tournament_id = tournamentID.group(1))
             curTournament.status = 2 #set the tournament status to abandoned
             curTournament.save()
-            return render(request, "proShop/shopActions.html", {
+            return render(request, "proshop/shopActions.html", {
                 "shopAccount":shopAccount,
                 "activeTournaments":activeTournaments,
                 "expiredTournaments":expiredTournaments,
@@ -111,7 +111,7 @@ def shopActions(request):
                 first = request.POST['First_Name']
                 last = request.POST['Last_Name']
                 playerResults = player.searchPlayer(first,last)
-                return render(request, "proShop/shopActions.html", {
+                return render(request, "proshop/shopActions.html", {
                     "shopAccount":shopAccount,
                     "activeTournaments":activeTournaments,
                     "expiredTournaments":expiredTournaments,
@@ -129,7 +129,7 @@ def shopActions(request):
         elif 'approve' in postAction:
             approveID = re.match(r"approve(\d+)",postAction)
             BillingEvent.completeEvent(BillingEvent.getEventByID(approveID.group(1)))
-            return render(request, "proShop/shopActions.html", {
+            return render(request, "proshop/shopActions.html", {
                     "shopAccount":shopAccount,
                     "activeTournaments":activeTournaments,
                     "expiredTournaments":expiredTournaments,
@@ -138,7 +138,7 @@ def shopActions(request):
                     "creditsRecieved":creditsRecieved,
                     "searchForm":searchForm})
     else:
-        return render(request, "proShop/shopActions.html", {
+        return render(request, "proshop/shopActions.html", {
             "shopAccount":shopAccount,
             "creditsRecieved":creditsRecieved,
             "creditsSpent":creditsSpent,
@@ -183,7 +183,7 @@ def purchaseFunds(request):
             request.session['amount'] = float(form.cleaned_data['amount'])
         return redirect("payment")
     else: 
-        return render(request, "proShop/purchaseFunds.html",{
+        return render(request, "proshop/purchaseFunds.html",{
             "form":form,
         })
 
@@ -255,7 +255,7 @@ def spendCredits(request,id):
             print('')
             return redirect('spendCredits',id=id)
     else:    
-        return render(request, "proShop/spendCredits.html",{
+        return render(request, "proshop/spendCredits.html",{
             "playerCredits":playerCredits,
             "shop":curShop,
             "player":curPlayer,
@@ -303,7 +303,7 @@ def authorizeTransaction(request):
                 else:
                     missCounter = BillingEvent.authMiss(billingEvent)
                     messages.add_message(request,messages.WARNING,'Invalid PIN. %s attempts remaining.' % missCounter)
-                    return render(request, 'proShop/authorizePurchase.html',{
+                    return render(request, 'proshop/authorizePurchase.html',{
                         'form':form,
                         'event':billingEvent,
                         'player':curPlayer,
@@ -315,7 +315,7 @@ def authorizeTransaction(request):
     
     else: 
         form = playerAuthPurchaseForm()
-        return render(request, 'proShop/authorizePurchase.html',{
+        return render(request, 'proshop/authorizePurchase.html',{
             'form':form,
             'event':billingEvent,
             'player':curPlayer,

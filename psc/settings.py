@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,7 +26,7 @@ SECRET_KEY = 'k@ssz-b+x*2s3l%w)q1_!)*$g2@1eaa(4a3kq$hc)y^w)(a&$1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://amadtest2.herokuapp.com/']
 
 
 # Application definition
@@ -66,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'psc.urls'
@@ -140,10 +142,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
+<<<<<<< HEAD
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 
+||||||| merged common ancestors
+STATIC_ROOT = ''
+
+=======
+STATIC_ROOT = ''
+#os.path.join(BASE_DIR, 'staticfiles')
+>>>>>>> 0fa50176a62716ff0b6ac6dc371de7d590d64269
 STATIC_URL = '/static/'
 
 #STATICFILES_DIRS = (os.path.join('static'),)
@@ -179,3 +189,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 #EMAIL_HOST_PASSWORD = '@Kbourne9'
 #EMAIL_PORT = 587
 #EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+django_heroku.settings(locals())
