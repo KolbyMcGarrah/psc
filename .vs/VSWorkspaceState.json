@@ -3,6 +3,7 @@
     "",
     "\\pga_events",
     "\\psc",
+    "\\static",
     "\\templates",
     "\\templates\\exec",
     "\\templates\\mail",

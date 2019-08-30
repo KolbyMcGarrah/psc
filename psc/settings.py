@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
-import django_heroku
+#import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,7 +26,7 @@ SECRET_KEY = 'k@ssz-b+x*2s3l%w)q1_!)*$g2@1eaa(4a3kq$hc)y^w)(a&$1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://amadtest2.herokuapp.com/']
+ALLOWED_HOSTS = ['https://amadtest2.herokuapp.com/', 'localhost']
 
 
 # Application definition
@@ -144,8 +144,9 @@ USE_TZ = True
 
 
 #PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = ''
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (os.path.join('static'),)
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
@@ -179,4 +180,4 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 #EMAIL_PORT = 587
 #EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-django_heroku.settings(locals())
+#django_heroku.settings(locals())

@@ -21,9 +21,9 @@ from django.conf.urls import include
 urlpatterns = [
     path('', include('pages.urls')),
 
-    #django admin 
+    #django admin
     path('admin/', admin.site.urls),
-    
+
     #Tournaments and events
     path('tournament/', include('tournament.urls')),
     path('event/', include('pga_events.urls')),
