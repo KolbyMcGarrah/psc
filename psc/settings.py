@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'crispy_forms',
-    'braintree', 
+    'braintree',
     'stripe',
 
     'users',
@@ -142,21 +142,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-<<<<<<< HEAD
-PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
-
-||||||| merged common ancestors
-STATIC_ROOT = ''
-
-=======
-STATIC_ROOT = ''
-#os.path.join(BASE_DIR, 'staticfiles')
->>>>>>> 0fa50176a62716ff0b6ac6dc371de7d590d64269
+#PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
-
-#STATICFILES_DIRS = (os.path.join('static'),)
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
@@ -177,7 +166,7 @@ STRIPE_PUBLISHABLE_KEY = 'pk_test_y3aNGnrrQwW3InrwTnYfVNv100lSVzr9is'
 STRIPE_SECRET_KEY = 'sk_test_g3KOhgnD0bGjNSao09orZdjG004zrMC2NR'
 STRIPE_CLIENT_ID = 'ca_FPXmhPuP9iXwzPmCuZRuj3EN3FFMHx7C'
 
-#Set up emailing for Development. Will output to the console 
+#Set up emailing for Development. Will output to the console
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
