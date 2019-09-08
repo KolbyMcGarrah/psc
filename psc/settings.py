@@ -144,7 +144,13 @@ USE_TZ = True
 
 
 #PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = ''
+#Dev static file settings
+#STATIC_ROOT = ''
+#STATIC_URL = '/static/'
+#STATICFILES_DIRS = (os.path.join('static'),)
+
+#HEROKU STATIC FILE settings
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join('static'),)
 
