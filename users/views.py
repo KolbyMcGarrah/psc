@@ -48,13 +48,13 @@ def playerRegistration(request):
     })
 
 def registerShop(request):
-    success_url = reverse_lazy('login') 
+    success_url = reverse_lazy('login')
     user = CustomUser()
     user_form = userForm(instance=user) # setup a form for the parent
     ShopInlineFormSet = inlineformset_factory(CustomUser, proShop, form=shopCreationForm,can_delete=False)
     formset = ShopInlineFormSet(instance=user)
     if request.method == "POST":
-        user_form = userForm(request.POST)       
+        user_form = userForm(request.POST)
         formset = ShopInlineFormSet(request.POST, request.FILES)
         if user_form.is_valid():
             created_user = user_form.save(commit=False)
@@ -137,6 +137,8 @@ def shopActions(request):
                     "creditsSpent":creditsSpent,
                     "creditsRecieved":creditsRecieved,
                     "searchForm":searchForm})
+        elif postAction == 'allEvents':
+            return redirect('billing')
     else:
         return render(request, "proshop/shopActions.html", {
             "shopAccount":shopAccount,
@@ -163,7 +165,7 @@ def playerActions(request):
         return redirect('playerEdit')
     else:
         return render(request, "player/playerActions.html",{
-            "upcomingTournaments":upcomingTournaments, 
+            "upcomingTournaments":upcomingTournaments,
             "previousTournaments":previousTournaments,
             "creditsRecieved":creditsRecieved,
             "creditsSpent":creditsSpent,
@@ -182,14 +184,14 @@ def purchaseFunds(request):
         if form.is_valid():
             request.session['amount'] = float(form.cleaned_data['amount'])
         return redirect("payment")
-    else: 
+    else:
         return render(request, "proshop/purchaseFunds.html",{
             "form":form,
         })
 
 @login_required
 @user_passes_test(exec_test,login_url='/', redirect_field_name=None)
-def execHome(request): 
+def execHome(request):
     user = request.user
     curSection = user.execFields.section
     sectionCredits = credits.getSectionCredits(curSection)
@@ -236,33 +238,6 @@ def execHome(request):
             "eventHistory":eventHistory
         })
 
-@login_required
-@user_passes_test(shop_test,login_url='/', redirect_field_name=None)
-def spendCredits(request,id):
-    curShop = request.user.userShop
-    curPlayer = CustomUser.objects.filter(id=id)[0]
-    playerAccount = account.getAccount(curPlayer)
-    playerCredits = credits.myCredits(curPlayer)
-    shopAccount = account.getShopAccount(curShop)
-    form = spendForm()
-    if request.method == "POST":
-        form = spendForm(request.POST)
-        if form.is_valid():
-            billing_event = BillingEvent.initializeEvent(curPlayer,request.user,form.cleaned_data['Item_Description'],form.cleaned_data['Amount'])
-            request.session['billingID'] = billing_event.BillingEventID
-            return redirect('authorizeTransaction')
-        else:
-            print('')
-            return redirect('spendCredits',id=id)
-    else:    
-        return render(request, "proshop/spendCredits.html",{
-            "playerCredits":playerCredits,
-            "shop":curShop,
-            "player":curPlayer,
-            "playerAccount":playerAccount,
-            "form":form,
-        })
-
 def createPin(request):
     if 'userID' in request.session:
         userID = request.session['userID']
@@ -283,43 +258,6 @@ def createPin(request):
         pinForm = pinCreation()
         return render(request,'player/createPin.html',{
             'form':pinForm,
-        })
-
-@login_required
-@user_passes_test(shop_test,login_url='/', redirect_field_name=None)
-def authorizeTransaction(request):
-    curShop = request.user.userShop
-    billingEvent = BillingEvent.objects.filter(BillingEventID=request.session['billingID'])[0]
-    curPlayer = billingEvent.player_account.account_owner
-    if request.method == 'POST':
-        if request.POST['action'] == 'confirm':
-            form = playerAuthPurchaseForm(request.POST)
-            if form.is_valid():
-                if player.checkPin(curPlayer,form.cleaned_data["Player_Pin"]):
-                    BillingEvent.approveEvent(billingEvent)
-                    del request.session['billingID']
-                    credits.spendCredits(billingEvent.player_account,billingEvent.shop_account,billingEvent.amount, billingEvent.description)
-                    return redirect('home')
-                else:
-                    missCounter = BillingEvent.authMiss(billingEvent)
-                    messages.add_message(request,messages.WARNING,'Invalid PIN. %s attempts remaining.' % missCounter)
-                    return render(request, 'proshop/authorizePurchase.html',{
-                        'form':form,
-                        'event':billingEvent,
-                        'player':curPlayer,
-                        'shop':curShop,
-                    })
-        else:
-            BillingEvent.cancelEvent(billingEvent)
-            return redirect('home')
-    
-    else: 
-        form = playerAuthPurchaseForm()
-        return render(request, 'proshop/authorizePurchase.html',{
-            'form':form,
-            'event':billingEvent,
-            'player':curPlayer,
-            'shop':curShop,
         })
 
 @login_required

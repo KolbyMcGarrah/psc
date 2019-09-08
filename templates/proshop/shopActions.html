@@ -15,8 +15,8 @@
 <div id="tournament" class="tabContent">
         <button class="accordion" onclick="openAccordion('activeTourn')">Active Tournaments</button>
             <div id="activeTourn" class="panel">
-                <form method='post'> 
-                    {% csrf_token %}   
+                <form method='post'>
+                    {% csrf_token %}
                     <table>
                         <thead>
                             <th>Number</th>
@@ -25,21 +25,21 @@
                             <th>Start Date</th>
                             <th>Remove</th>
                             <th>Update</th>
-                        </thead>            
+                        </thead>
                         <tbody>
                             {% for tournament in activeTournaments %}
-                                <tr>     
+                                <tr>
                                     <td>{{ forloop.counter }}</td>
                                     <td>{{ tournament.tournament_name }}</td>
                                     <td>{{ tournament.created_on }}</td>
-                                    <td>{{ tournament.tournament_date }}</td>                                    
+                                    <td>{{ tournament.tournament_date }}</td>
                                     {% if tournament.status == 1 %}
                                         <td class='buttonCol'><button  type='submit' name='action' value="remove {{tournament.tournament_id}}"  class="btn btn-danger">Remove</button></td>
                                     {% else %}
                                         <td>N/A</td>
                                     {% endif %}
                                     <td class='buttonCol'><button type='submit' name='action' value="update {{tournament.tournament_id}}" class = "btn btn-warning">Update</button></td>
-                                </tr>                    
+                                </tr>
                             {% endfor %}
                         </tbody>
                     </table>
@@ -54,16 +54,16 @@
                                 <th>Created On</th>
                                 <th>Start Date</th>
                                 <th>View Details</th>
-                            </thead>            
+                            </thead>
                             <tbody>
                                 {% for tournament in expiredTournaments %}
-                                    <tr>     
+                                    <tr>
                                         <td>{{ forloop.counter }}</td>
                                         <td>{{ tournament.tournament_name }}</td>
                                         <td>{{ tournament.created_on }}</td>
                                         <td>{{ tournament.tournament_date }}</td>
                                         <td class='buttonCol'><a class="btn btn-primary" href="{% url 'tournamentHistory' id=tournament.tournament_id %}">View</a></td>
-                                    </tr>                    
+                                    </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
@@ -118,7 +118,7 @@
                     <td><button class="btn btn-success">Refund Credits</button></td>
                 </tr>
                 {% endfor %}
-                <tr><button class="btn btn-success">Approve All</button></tr>
+                <tr><button class="btn btn-success" name="action" value="allEvents">Approve All</button></tr>
             </table>
         </form>
     </div>
@@ -130,7 +130,7 @@
                 <th>Amount</th>
                 <th>Transaction Reason</th>
                 <th>Transaction Date</th>
-            </thead>            
+            </thead>
             <tbody>
                 {% for field in creditsRecieved %}
                 <tr>
@@ -142,7 +142,7 @@
                 {% endfor %}
             </tbody>
         </table>
-    </div> 
+    </div>
     <button class="accordion" onclick="openAccordion('credSpen')">Credits Spent</button>
     <div id='credSpen' class='panel'>
         <table>
@@ -151,7 +151,7 @@
                 <th>Amount</th>
                 <th>Transaction Reason</th>
                 <th>Transaction Date</th>
-            </thead>            
+            </thead>
             <tbody>
                 {% for field in creditsSpent %}
                 <tr>
