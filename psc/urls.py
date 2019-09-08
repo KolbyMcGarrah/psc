@@ -28,6 +28,9 @@ urlpatterns = [
     path('tournament/', include('tournament.urls')),
     path('event/', include('pga_events.urls')),
 
+    #credits and billing
+    path('credits/', include('credits.urls')),
+
     #User management
     path('users/', include('users.urls')),
     path('account/', include('accounts.urls')),

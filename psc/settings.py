@@ -47,12 +47,12 @@ INSTALLED_APPS = [
     'crispy_forms',
     'braintree',
     'stripe',
-
     'users',
     'pages',
     'tournament',
     'accounts',
     'pga_events',
+    'credits',
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'
@@ -166,7 +166,7 @@ BRAINTREE_PRIVATE_KEY = 'af7353c37fb023f96ea98799c87caaf6'
 STRIPE_PUBLISHABLE_KEY = 'pk_test_y3aNGnrrQwW3InrwTnYfVNv100lSVzr9is'
 STRIPE_SECRET_KEY = 'sk_test_g3KOhgnD0bGjNSao09orZdjG004zrMC2NR'
 STRIPE_CLIENT_ID = 'ca_FPXmhPuP9iXwzPmCuZRuj3EN3FFMHx7C'
-
+STRIPE_REDIRECT = 'https://amadtest2.herokuapp.com/credits/stripeConfirm'
 #Set up emailing for Development. Will output to the console
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
