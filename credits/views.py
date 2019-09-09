@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from users.models import CustomUser, proShop, player, execUser
 from django.conf import settings
 from .forms import *
+import urllib
 
 
 def shop_test(user):
