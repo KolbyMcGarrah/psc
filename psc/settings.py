@@ -94,22 +94,11 @@ WSGI_APPLICATION = 'psc.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 #Dev Database
-#DATABASES = {
-    #'default': {
-        #'ENGINE': 'django.db.backends.sqlite3',
-        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    #}
-#}
-#Heroku Database
 DATABASES = {
-'default': {
-    'ENGINE': 'django.db.backends.postgresql',
-    'NAME': 'mydatabase',
-    'USER': 'mydatabaseuser',
-    'PASSWORD': 'mypassword',
-    'HOST': '',
-    'PORT': '5432',
-}
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
 }
 
 # Password validation
