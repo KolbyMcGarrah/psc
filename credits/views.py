@@ -85,6 +85,7 @@ def billing(request):
         redirectURL=settings.STRIPE_REDIRECT
         url = f'https://connect.stripe.com/oauth/authorize'
         params = {
+            'response_type': 'code',
             'client_id':settings.STRIPE_CLIENT_ID,
             'redirect_uri':redirectURL
         }
