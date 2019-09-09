@@ -81,13 +81,15 @@ def billing(request):
     curShop = request.user.userShop
     shopAct = account.getShopAccount(curShop)
     if shopAct.stripe_id is None:
-        print("here i am")
         redirectURL=settings.STRIPE_REDIRECT
-        clientID=settings.STRIPE_CLIENT_ID
-        #create the stirpe url
-        stripeConnectURL = "https://connect.stripe.com/express/oauth/authorize?redirect_uri="+redirectURL+"/"+str(curShop.user.id)+"&client_id="+clientID
+        url = f'https://connect.stripe.com/oauth/authorize'
+        params = {
+            'client_id':settings.STRIPE_CLIENT_ID,
+            'redirect_uri':redirectURL
+        }
         #Redirect to stripe connect page.
-        return redirect(stripeConnectURL)
+        url = f'{url}?{urllib.parse.urlencode(params)}'
+        return redirect(url)
     else:
         print(shopAct.stripe_id)
         return redirect(home)
@@ -105,6 +107,7 @@ def stripeConfirm(request,id):
         }
         url = 'https://connect.stripe.com/oauth/token'
         resp = requests.post(url, params=data)
+        print(resp.json)
         shopAct.stripe_id=code
         shopAct.save()
         return redirect(billing)
