@@ -98,7 +98,7 @@ def billing(request):
         return redirect(home)
 
 def stripeConfirm(request):
-    curShop = CustomUser.getShopFromID(request.user.id)
+    curShop = user.getShopFromID(request.user.id)
     shopAct = accounts.getShopAccount(curShop)
     code = request.GET.get('code')
     if code:
