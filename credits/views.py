@@ -109,10 +109,12 @@ def stripeConfirm(request):
             'code': code
         }
         url = 'https://connect.stripe.com/oauth/token'
+        #post to stripe with code to connect account.
         resp = requests.post(url, params=data)
         print(resp.json)
         stripe_user_id = resp.json()['stripe_user_id']
         stripe_access_token = resp.json()['access_token']
+        #Update database with id and access token.
         shopAct.stripe_id = stripe_user_id
         shopAct.stripe_access_token = stripe_access_token
         shopAct.save()
