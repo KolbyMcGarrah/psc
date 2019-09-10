@@ -29,7 +29,6 @@ def spendCredits(request,id):
             request.session['billingID'] = billing_event.BillingEventID
             return redirect('authorizeTransaction')
         else:
-            print('')
             return redirect('spendCredits',id=id)
     else:
         return render(request, "proshop/spendCredits.html",{
@@ -95,7 +94,7 @@ def billing(request):
         return redirect(url)
     else:
         print(shopAct.stripe_id)
-        return redirect(home)
+        return redirect('home')
 
 def stripeConfirm(request):
     curShop = proShop.getShopFromID(request.user.id)
