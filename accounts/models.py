@@ -14,6 +14,7 @@ class account(models.Model):
                     default=1)
     account_owner = models.OneToOneField(CustomUser, related_name='userAccount', on_delete=models.CASCADE)
     stripe_id = models.CharField(max_length=100, null=True, blank=True)
+    stripe_access_token = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return str(self.account_owner) + " Account"

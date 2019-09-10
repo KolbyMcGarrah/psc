@@ -87,7 +87,8 @@ def billing(request):
         params = {
             'response_type': 'code',
             'client_id':settings.STRIPE_CLIENT_ID,
-            'redirect_uri':redirectURL
+            'redirect_uri':redirectURL, 
+            'scope':'read-write',
         }
         #Redirect to stripe connect page.
         url = f'{url}?{urllib.parse.urlencode(params)}'
@@ -96,7 +97,7 @@ def billing(request):
         print(shopAct.stripe_id)
         return redirect(home)
 
-def stripeConfirm(request,id):
+def stripeConfirm(request):
     curShop = users.getShopFromID(id)
     shopAct = accounts.getShopAccount(curShop)
     code = request.GET.get('code')
@@ -110,6 +111,9 @@ def stripeConfirm(request,id):
         url = 'https://connect.stripe.com/oauth/token'
         resp = requests.post(url, params=data)
         print(resp.json)
-        shopAct.stripe_id=code
+        stripe_user_id = resp.json()['stripe_user_id']
+        stripe_access_token = resp.json()['access_token']
+        shopAct.stripe_id = stripe_user_id
+        shopAct.stripe_access_token = stripe_access_token
         shopAct.save()
         return redirect(billing)

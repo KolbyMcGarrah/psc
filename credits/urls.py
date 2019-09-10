@@ -5,5 +5,5 @@ urlpatterns = [
     path('spendCredits/<id>', views.spendCredits, name='spendCredits'),
     path('authorizeTransaction/', views.authorizeTransaction, name='authorizeTransaction'),
     path('billing/', views.billing, name='billing'),
-    path('stripeConfirm/<id>', views.stripeConfirm, name='stripeConfirm'),
+    path('stripeConfirm', views.stripeConfirm, name='stripeConfirm'),
 ]
