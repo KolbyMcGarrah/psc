@@ -5,7 +5,7 @@ from users.models import CustomUser, proShop, player, execUser
 from django.conf import settings
 from .forms import *
 import urllib
-
+import requests
 
 def shop_test(user):
     return CustomUser.isShop(user)
