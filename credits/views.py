@@ -88,7 +88,7 @@ def billing(request):
             'response_type': 'code',
             'client_id':settings.STRIPE_CLIENT_ID,
             'redirect_uri':redirectURL, 
-            'scope':'read-write',
+            'scope':'read_write',
         }
         #Redirect to stripe connect page.
         url = f'{url}?{urllib.parse.urlencode(params)}'
