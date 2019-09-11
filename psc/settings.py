@@ -93,12 +93,22 @@ WSGI_APPLICATION = 'psc.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-#Dev Database
+#Dev sqlite Database
+#DATABASES = {
+##        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#    }
+#}
+#PostgreSQL Database Configs
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+        'default':{
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'amateuradvantage',
+            'USER': 'amad',
+            'PASSWORD': '#HangL00s3',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
 }
 
 # Password validation
