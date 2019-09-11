@@ -6,6 +6,7 @@ from django.conf import settings
 from .forms import *
 import urllib
 import requests
+from django.contrib import messages
 
 def shop_test(user):
     return CustomUser.isShop(user)
