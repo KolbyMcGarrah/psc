@@ -99,18 +99,27 @@ WSGI_APPLICATION = 'psc.wsgi.application'
 #        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #    }
 #}
-#PostgreSQL Database Configs
-DATABASES = {
+#PostgreSQL Dev Database Configs
+#DATABASES = {
+#        'default':{
+#            'ENGINE': 'django.db.backends.postgresql',
+#            'NAME': 'amateuradvantage',
+#            'USER': 'amad',
+#            'PASSWORD': '#HangL00s3',
+#            'HOST': 'localhost',
+#            'PORT': '',
+#        }
+#}
+DATABASE = {
         'default':{
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'amateuradvantage',
-            'USER': 'amad',
-            'PASSWORD': '#HangL00s3',
-            'HOST': 'localhost',
-            'PORT': '',
+            'NAME': 'df6qobieabd7eq',
+            'USER': 'eserbbffwdroyu',
+            'PASSWORD': '49289a87d2baa03c9814c39636cbc04f12938d0773cf5f1362045c1afa67167e',
+            'HOST': 'postgres://eserbbffwdroyu:49289a87d2baa03c9814c39636cbc04f12938d0773cf5f1362045c1afa67167e@ec2-23-23-182-18.compute-1.amazonaws.com:5432/df6qobieabd7eq',
+            'PORT': '5432',
         }
 }
-
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
