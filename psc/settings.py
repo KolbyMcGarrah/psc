@@ -11,17 +11,17 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
-#import dj_database_url
-#import dotenv
-#import django_heroku
+import dj_database_url
+import dotenv
+import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 #Load environment variables from .env if it exists
-#dotenv_file = os.path.join(BASE_DIR, ".env")
-#if os.path.isfile(dotenv_file):
-#   dotenv.load_dotenv(dotenv_file)
+dotenv_file = os.path.join(BASE_DIR, ".env")
+if os.path.isfile(dotenv_file):
+    dotenv.load_dotenv(dotenv_file)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
@@ -116,16 +116,8 @@ WSGI_APPLICATION = 'psc.wsgi.application'
 #            'PORT': '',
 #        }
 #}
-DATABASES = {
-        'default':{
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'df6qobieabd7eq',
-            'USER': 'eserbbffwdroyu',
-            'PASSWORD': '49289a87d2baa03c9814c39636cbc04f12938d0773cf5f1362045c1afa67167e',
-            'HOST': 'postgres://eserbbffwdroyu:49289a87d2baa03c9814c39636cbc04f12938d0773cf5f1362045c1afa67167e@ec2-23-23-182-18.compute-1.amazonaws.com:5432/df6qobieabd7eq',
-            'PORT': '5432',
-        }
-}
+DATABASES = {}
+DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
@@ -174,6 +166,7 @@ USE_TZ = True
 #STATICFILES_DIRS = (os.path.join('static'),)
 
 #HEROKU STATIC FILE settings
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join('static'),)
@@ -210,4 +203,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 #EMAIL_PORT = 587
 #EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-#django_heroku.settings(locals())
+django_heroku.settings(locals())
+del DATABASES['default']['OPTIONS']['sslmode']
