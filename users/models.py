@@ -78,7 +78,7 @@ class player (models.Model):
         for i in range(4):
             #randint generates a random number between 0,9
             PIN = PIN + str(random.randint(0,9))
-        return(f"4 digits PIN:{PIN}")
+        return(PIN)
 
 class proShop (models.Model):
     section_options = ((1,'Alabama'),(2,'Colorado'),(3,'Carolinas'),(4,'Georgia'),(5,'Central New York'),(6,'Illinois'),(7,'Connecticut'),(8,'Iowa'),(9,'Gateway'),(10,'Metropolitan NY'),
