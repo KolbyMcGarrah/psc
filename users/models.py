@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
 from passlib.hash import pbkdf2_sha256
+import random
 
 class CustomUserManager(UserManager):
     pass
@@ -69,6 +70,15 @@ class player (models.Model):
 
     def getPlayerFromID(id):
         return player.objects.get(user__id = id)
+    
+    def generateRandomPin():
+        #varible PIN store all random digits
+        PIN = ""
+        #you change the length of pin by changing value of range
+        for i in range(4):
+            #randint generates a random number between 0,9
+            PIN = PIN + str(random.randint(0,9))
+        return(PIN)
 
 class proShop (models.Model):
     section_options = ((1,'Alabama'),(2,'Colorado'),(3,'Carolinas'),(4,'Georgia'),(5,'Central New York'),(6,'Illinois'),(7,'Connecticut'),(8,'Iowa'),(9,'Gateway'),(10,'Metropolitan NY'),

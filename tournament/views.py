@@ -75,6 +75,8 @@ def updateTournament(request, id):
                     created_user.userType=2
                     created_user.save()
                     formset.save()
+                    tempPin=player.generateRandomPin()
+                    player.updatePin(created_user,tempPin)
                     playerAccount = account.createPlayerAccount(created_user)
                     playerAccount.save()
                     tournyPlayer = playerResults() 
@@ -83,7 +85,7 @@ def updateTournament(request, id):
                     tournyPlayer.save()
                     #Set up email variables
                     subject, from_email, to = 'Welcome to Amateur Advantage','NOREPLY@domain.com', created_user.email
-                    html_content = render_to_string('mail/tempPassWord.html', {'tempPassword':tempPass, "username":created_user.username, "name":created_user.first_name})
+                    html_content = render_to_string('mail/tempPassWord.html', {'tempPassword':tempPass, "username":created_user.username, "name":created_user.first_name, "tempPin":tempPin})
                     text_content = strip_tags(html_content)
                     email_msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
                     email_msg.attach_alternative(html_content, "text/html")

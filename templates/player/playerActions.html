@@ -19,11 +19,13 @@
                     {% csrf_token %}   
                     <table>
                         <thead>
-                            <th>Number</th>
-                            <th>Tournament Name</th>
-                            <th>Created On</th>
-                            <th>Start Date</th>
-                            <th>Drop Out</th>
+                            <tr>
+                                <th>Number</th>
+                                <th>Tournament Name</th>
+                                <th>Created On</th>
+                                <th>Start Date</th>
+                                <th>Drop Out</th>
+                            </tr>
                         </thead>            
                         <tbody>
                             {% for tournament in upcomingTournaments %}
@@ -43,11 +45,13 @@
             <div id="tournHist" class="panel">
                     <table>
                             <thead>
-                                <th>Number</th>
-                                <th>Tournament Name</th>
-                                <th>Start Date</th>
-                                <th>Final Place</th>
-                                <th>Amount Won</th>
+                                <tr>
+                                    <th>Number</th>
+                                    <th>Tournament Name</th>
+                                    <th>Start Date</th>
+                                    <th>Final Place</th>
+                                    <th>Amount Won</th>
+                                </tr>
                             </thead>            
                             <tbody>
                                 {% for tournament in previousTournaments %}
@@ -89,11 +93,13 @@
         <h5>Credit Breakdown</h5>
         <table>
                 <thead>
-                    <th>Number</th>
-                    <th>Amount</th>
-                    <th>Date Assigned</th>
-                    <th>Expiration Date</th>
-                    <th>Status</th>
+                    <tr>
+                        <th>Number</th>
+                        <th>Amount</th>
+                        <th>Date Assigned</th>
+                        <th>Expiration Date</th>
+                        <th>Status</th>
+                    </tr>
                 </thead>            
                 <tbody>
                     {% for field in playerCredits %}
@@ -112,10 +118,12 @@
     <div id='credRec' class='panel'>
         <table>
             <thead>
-                <th>Number</th>
-                <th>Amount</th>
-                <th>Transaction Reason</th>
-                <th>Transaction Date</th>
+                <tr>
+                    <th>Number</th>
+                    <th>Amount</th>
+                    <th>Transaction Reason</th>
+                    <th>Transaction Date</th>
+                </tr>
             </thead>            
             <tbody>
                 {% for field in creditsRecieved %}
@@ -133,10 +141,12 @@
     <div id='credSpen' class='panel'>
         <table>
             <thead>
-                <th>Number</th>
-                <th>Amount</th>
-                <th>Transaction Reason</th>
-                <th>Transaction Date</th>
+                <tr>
+                    <th>Number</th>
+                    <th>Amount</th>
+                    <th>Transaction Reason</th>
+                    <th>Transaction Date</th>
+                </tr>
             </thead>            
             <tbody>
                 {% for field in creditsSpent %}
