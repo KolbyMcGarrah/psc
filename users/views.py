@@ -268,3 +268,19 @@ def playerEdit(request):
 
     else:
         return redirect('home')
+
+def playerOverview(request):
+    curPlayer = request.user.userPlayer
+    playerAccount = account.getPlayerAccount(curPlayer)
+    totalActive = credits.getTotalActiveCredits(playerAccount)
+    expiringCredits = credits.totalExpiringCredits(playerAccount)
+    expiredCredits = credits.totalExpiredCredits(playerAccount)
+    lastTournament = tournament.getPlayerTournaments(curPlayer)[0].tournament_name
+    highestPrize = playerResults.getHighestPrize(curPlayer)
+    return render(request,'player/playerOverview.html',{
+        "totalActive":totalActive,
+        "expiringCredits":expiringCredits,
+        "expiredCredits":expiredCredits,
+        "lastTournament":lastTournament,
+        "highestPrize":highestPrize,
+    })

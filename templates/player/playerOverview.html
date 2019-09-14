@@ -1,0 +1,78 @@
+{%extends 'base.html'%}
+{% load static %}
+{% block css %}
+  <link rel="stylesheet" type="text/css" href="{% static 'player/playerOverview.css' %}">
+{% endblock %}
+{% block content %}
+<nav>
+  <h1>Actions</h1>
+  <ul>
+    <li class="active"><a>Overview</a></li>
+    <li><a>Credits</a></li>
+    <li><a>Tournaments</a></li>
+    <li><a>Trade</a></li>
+    <li><a>Profile</a></li>
+  </ul>
+</nav>
+<div class="dashboard">
+  <article class="">
+    <header>
+      <h1>Overview</h1>
+      <h2>{{user.username}}</h2>
+    </header>
+  </article>
+  <section>
+    <h1>Credits</h1>
+      <!-- Populate amount of available credits -->
+      <!-- Populate how many expiring credits -->
+      <!-- Populate how many credits you've let expire -->
+      <table>
+        <tbody>
+          <tr>
+            <td>Total Amount of Active Credits:</td>
+            <td>{{totalActive}}</td>
+          </tr>
+          <tr>
+            <td>Total Amount of Credits About to Expire:</td>
+            <td>{{expiringCredits}}</td>
+          </tr>
+          <tr>
+            <td>Total Amount of Expired Credits:</td>
+            <td>{{expiredCredits}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>Credits can be exchanged at any pro shop using AmateurAdvantage.com. To find nearby pro shops, use the link below.</p>
+      <p>To view all individual credits select the "View Credit Breakdown" button below.</p>
+      <a class='btn btn-success' href="#">Find Nearby Shops</a>
+      <a href="#" class='btn btn-success'>View Credit Breakdown</a>
+  </section>
+  <div class="bottomGrid">
+    <section>
+      <h1>Tournament Info</h1>
+      <!-- Upcomming Tournaments -->
+      <table>
+        <tbody>
+          <tr>
+            <td>Last Tournament:</td>
+            <td>{{lastTournament}}</td>
+          </tr>
+          <tr>
+            <td>Largest Prize Won:</td>
+            <td>{{highestPrize}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <a href="#" class='btn btn-success'>View Previous Tournaments</a>
+    </section>
+    <section>
+      <!-- Trade Credits -->
+      <!-- Purchase Additional Credits # Available for purchase-->
+      <h1>Trade</h1>
+      <p>Exchange credits for gift cards to your favorite restaurants and stores,
+         or purchase discounted credits to exchange at your favorite pro club.</p>
+      <a href="#" class='btn btn-success'>Trade Now!</a>
+    </section>
+  </div>
+</div>
+{% endblock %}

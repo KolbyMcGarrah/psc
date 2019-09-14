@@ -9,4 +9,5 @@ urlpatterns = [
     path('purchaseFunds/', views.purchaseFunds, name = 'purchaseFunds'),
     path('execHome/', views.execHome, name = 'execHome'),
     path('createPin/', views.createPin, name='createPin'),
+    path('playerOverview/', views.playerOverview, name='playerOverview'),
 ]

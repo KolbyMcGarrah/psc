@@ -2,6 +2,7 @@ from django.db import models
 from users.models import CustomUser, proShop, player, execUser
 from datetime import datetime, date, timedelta
 from django.db.models import Q
+import decimal
 # Create your models here.
 class account(models.Model):
     account_choices = ((1,'player'), (2,'shop'), (3,'buyer'), (4,'AmAd'))
@@ -18,13 +19,13 @@ class account(models.Model):
 
     def __str__(self):
         return str(self.account_owner) + " Account"
-    
+
     def transferFunds(account1, account2, amount, reason):
         sourceAccount = account1
         destAccount = account2
         sourceBalance = sourceAccount.current_balance
         destBalance = destAccount.current_balance
-        if sourceBalance >= amount: 
+        if sourceBalance >= amount:
             newSourceBalance = sourceBalance - amount
             newdestBalance = destBalance + amount
             destAccount.current_balance = newdestBalance
@@ -34,7 +35,7 @@ class account(models.Model):
             credits.assignCredit(amount,sourceAccount,destAccount)
             transaction.log_transaction(sourceAccount, destAccount, amount, reason)
             return True
-        else: 
+        else:
             return False
 
     def addShopFunds(account1, amount):
@@ -43,7 +44,7 @@ class account(models.Model):
         fundedAccount.save()
         AmAdUsr = CustomUser.objects.filter(username='AmAd')[0]
         transaction.log_transaction(AmAdUsr.userAccount,fundedAccount,amount,"Purchasing Credits")
-    
+
 
     def createPlayerAccount(user):
         curAccount = account()
@@ -51,15 +52,15 @@ class account(models.Model):
         curAccount.current_balance = 0.00
         curAccount.account_owner=user
         return curAccount
-    
-    def createShopAccount(user): 
+
+    def createShopAccount(user):
         curAccount = account()
         curAccount.account_type = 2
         curAccount.current_balance = 0.00
         curAccount.account_owner = user
         return curAccount
-    
-    def getAccount(user): 
+
+    def getAccount(user):
         curAccount = account.objects.filter(account_owner = user)[0]
         return curAccount
 
@@ -69,15 +70,15 @@ class account(models.Model):
 
     def getPlayerAccount(player):
             return account.getAccount(player.user)
-    def getTotalCredits(): 
+    def getTotalCredits():
         allAccounts = account.objects.all()
         accountTotal = 0.00
         for field in allAccounts:
             accountTotal = accountTotal + field.current_balance
         return accountTotal
 
-    def fundsAvailable(curAccount, amount): 
-        if curAccount.current_balance < amount: 
+    def fundsAvailable(curAccount, amount):
+        if curAccount.current_balance < amount:
             return False
         else:
             return True
@@ -92,10 +93,10 @@ class account(models.Model):
             return True
         else:
             return False
-   
 
-    
-class transaction(models.Model): 
+
+
+class transaction(models.Model):
     transaction_ID = models.AutoField(primary_key=True)
     source_account = models.ForeignKey(account, related_name='payedCredits', on_delete = models.CASCADE)
     destination_account = models.ForeignKey(account, related_name='recievedCredits', on_delete = models.CASCADE)
@@ -110,10 +111,10 @@ class transaction(models.Model):
         newTransaction.amount = amount
         newTransaction.transaction_reason = reason
         newTransaction.save()
-    
+
     def getPayedTransactions(account1):
         transactions = account1.payedCredits.all()
-        for field in transactions: 
+        for field in transactions:
            field.amount = (-1)*field.amount
         return transactions
 
@@ -121,7 +122,7 @@ class transaction(models.Model):
         transactions = account1.recievedCredits.all()
         return transactions
 
-class credits(models.Model): 
+class credits(models.Model):
     status_choices = ((1,'Active'), (2,'Expiring'), (3,'Expired'))
     credit_id = models.AutoField(primary_key=True)
     credit_amount = models.DecimalField(max_digits=11, decimal_places=2, default=0.00)
@@ -132,11 +133,11 @@ class credits(models.Model):
     source = models.ForeignKey(account,related_name='accountCredits', on_delete=models.CASCADE)
     class Meta:
         verbose_name_plural = 'Credits'
-    
+
     def __str__(self):
         return str(self.credit_amount) + ' credits for ' + str(self.owner)
 
-    def assignCredit(amount,sourceAcct, destAccount): 
+    def assignCredit(amount,sourceAcct, destAccount):
         credit = credits()
         credit.source = sourceAcct
         credit.owner = destAccount
@@ -144,14 +145,46 @@ class credits(models.Model):
         credit.credit_amount=amount
         credit.save()
         return credit
-    
-    def myCredits(curUser): 
+
+    def getActiveCredits(act):
+        return credits.objects.filter(owner=act, status=1)
+
+    def getExpiringCredits(act):
+        return credits.objects.filter(owner=act, status=2)
+
+    def getExpiredCredits(act):
+        return credits.objects.filter(owner=act, status=3)
+
+    def getTotalActiveCredits(act):
+        total = decimal.Decimal(0.00)
+        activeCredits = credits.getActiveCredits(act)
+        expiringCredits = credits.getExpiringCredits(act)
+        totalCredits = activeCredits | expiringCredits
+        for credit in totalCredits:
+            total += credit.credit_amount
+        return total
+
+    def totalExpiringCredits(act):
+        total = decimal.Decimal(0.00)
+        expiringCredits = credits.getExpiringCredits(act)
+        for credit in expiringCredits:
+            total += credit.credit_amount
+        return total
+
+    def totalExpiredCredits(act):
+        total = decimal.Decimal(0.00)
+        expiredCredits = credits.getExpiredCredits(act)
+        for credit in expiredCredits:
+            total += credit.credit_amount
+        return total
+
+    def myCredits(curUser):
         return credits.objects.filter(owner=curUser.userAccount)
-        
+
     def getSectionCredits(curSection):
         sectionCredits = credits.objects.filter(Q(source__account_owner__userShop__section = curSection)|Q(source__account_owner__execFields__section = curSection))
         return sectionCredits
-    
+
     def spendCredits(source, destination, amount, reason):
         availableCredits = credits.objects.filter(owner=source).order_by('expiration_date')
         remainder = amount
@@ -164,12 +197,12 @@ class credits(models.Model):
                         credit.credit_amount = 0
                     credit.save()
                 else:
-                    pass                               
+                    pass
             credits.objects.filter(owner=source,credit_amount = 0).delete()
             return True
         else:
             return amount - source.current_balance
-    
+
     def expireCredits():
         today = date.today()
         total_credits = credits.objects.filter(expiration_date__lt = today,status=2)
@@ -198,7 +231,7 @@ class credits(models.Model):
         total = 0.00
         for credit in creditSet:
             total += float(credit.credit_amount)
-        return total    
+        return total
 
     def expiringSecCredits(sec):
         creditSet = credits.objects.filter(Q(source__account_owner__userShop__section = sec)|Q(source__account_owner__execFields__section = sec),status=2)
@@ -206,7 +239,7 @@ class credits(models.Model):
         for credit in creditSet:
             total += float(credit.credit_amount)
         return total
-    
+
     def expiredSecCredits(sec):
         creditSet = credits.objects.filter(Q(source__account_owner__userShop__section = sec)|Q(source__account_owner__execFields__section = sec),status=3)
         total = 0.00
@@ -228,11 +261,11 @@ class BillingEvent(models.Model):
 
     def __str__(self):
         return str(self.request_ts) + ' ' + str(self.shop_account) + ' ' + str(self.status) + ' Billing Event for ' + str(self.description)
-    
+
     def initializeEvent(player, shop, desc, amt):
         newEvent = BillingEvent.objects.create(status=1,amount=amt,description=desc, player_account=player.userAccount, shop_account=shop.userAccount)
         return newEvent
-    
+
     def approveEvent(event):
         event.status = 3
         event.save()
@@ -242,7 +275,7 @@ class BillingEvent(models.Model):
         event.status = 4
         event.save()
         return True
-    
+
     def cancelEvent(event):
         event.status = 2
         event.save()
@@ -250,26 +283,22 @@ class BillingEvent(models.Model):
 
     def getEvents(shop):
         return shop.userAccount.shopBillingEvents
-    
+
     def getPendingEvents(shop):
         return BillingEvent.objects.filter(shop_account=shop.userAccount, status = 1)
-    
+
     def getCompleteEvents(shop):
         return BillingEvent.objects.filter(shop_account=shop.userAccount, status = 4)
-    
+
     def getApprovedEvents(shop):
         return BillingEvent.objects.filter(shop_account=shop.userAccount, status = 3)
-    
+
     def authMiss(event):
         missCounter = event.auth_attempt_counter
         missCounter = missCounter - 1
         event.auth_attempt_counter = missCounter
         event.save()
         return missCounter
-    
+
     def getEventByID(eventID):
         return BillingEvent.objects.get(BillingEventID=eventID)
-
-
-
-                    
