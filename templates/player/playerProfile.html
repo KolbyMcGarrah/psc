@@ -1,0 +1,40 @@
+{%extends 'base.html'%}
+{% load static %}
+{% block css %}
+  <link rel="stylesheet" type="text/css" href="{% static 'player/playerProfile.css' %}">
+{% endblock %}
+{% block content %}
+<nav>
+  <h1>Actions</h1>
+  <ul>
+    <li><span class="glyphicon glyphicon-home"></span><a href="{% url 'playerOverview' %}">Overview</a></li>
+    <li><span class="glyphicon glyphicon-credit-card"></span><a href="{% url 'playerCredits' %}">Credits</a></li>
+    <li><span class="glyphicon glyphicon-tree-conifer"></span><a href="{% url 'playerTournaments' %}">Tournaments</a></li>
+    <li><span class="glyphicon glyphicon-tags"></span><a href="{% url 'trade' %}">Trade</a></li>
+    <li class="active"><span class="glyphicon glyphicon-user"></span><a href="{% url 'playerProfile' %}">Profile</a></li>
+  </ul>
+</nav>
+<div class="dashboard">
+  <article class="">
+    <header>
+      <h1>Profile</h1>
+      <h2>{{user.username}}</h2>
+    </header>
+  </article>
+  <section>
+    <h1>Profile Information</h1>
+    <div class="profileInfo">
+        <label>Username</label>
+        <p>{{curUser.username}}</p>
+        <label>First Name</label>
+        <p>{{curUser.first_name}}</p>
+        <label>Last Name</label>
+        <p>{{curUser.last_name}}</p>
+        <label>Address</label>
+        <p>{{curUser.userPlayer.address}}</p>
+        <label>Home Course</label>
+        <p>{{curUser.userPlayer.homeCourse}}</p>
+    </div>
+  </section>
+</div>
+{%endblock%}

@@ -314,3 +314,9 @@ def trade(request):
     return render(request, "player/trade.html",{
         "playerAccount":playerAccount,
     })
+
+def playerProfile(request):
+    curUser = request.user
+    return render(request,"player/playerProfile.html",{
+        "curUser":curUser,
+    })

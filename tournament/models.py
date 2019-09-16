@@ -132,8 +132,7 @@ class playerResults (models.Model):
         current.position = pos
         current.save()
     def getPlayerResults(curPlayer):
-        results = playerResults.objects.filter(player=curPlayer, tournament__status=4)
-        return results
+        return playerResults.objects.filter(player=curPlayer)
 
     def getHighestPrize(curPlayer):
         prize = decimal.Decimal(0.00)

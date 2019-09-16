@@ -13,4 +13,5 @@ urlpatterns = [
     path('playerCredits/', views.playerCredits, name='playerCredits'),
     path('playerTournaments/', views.playerTournaments, name='playerTournaments'),
     path('trade/', views.trade, name='trade'),
+    path('playerProfile/', views.playerProfile, name='playerProfile'),
 ]
