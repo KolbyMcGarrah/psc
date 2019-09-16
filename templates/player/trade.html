@@ -1,0 +1,30 @@
+{%extends 'base.html'%}
+{% load static %}
+{% block css %}
+  <link rel="stylesheet" type="text/css" href="{% static 'player/playerCredits.css' %}">
+{% endblock %}
+{% block content %}
+<nav>
+  <h1>Actions</h1>
+  <ul>
+    <li><span class="glyphicon glyphicon-home"></span><a href="{% url 'playerOverview' %}">Overview</a></li>
+    <li><span class="glyphicon glyphicon-credit-card"></span><a href="{% url 'playerCredits' %}">Credits</a></li>
+    <li><span class="glyphicon glyphicon-tree-conifer"></span><a href="{% url 'playerTournaments' %}">Tournaments</a></li>
+    <li class="active"><span class="glyphicon glyphicon-tags"></span><a href="{% url 'trade' %}">Trade</a></li>
+    <li><span class="glyphicon glyphicon-user"></span><a>Profile</a></li>
+  </ul>
+</nav>
+<div class="dashboard">
+  <article class="">
+    <header>
+      <h1>Trade</h1>
+      <h2>{{user.username}}</h2>
+    </header>
+  </article>
+  <section>
+    <h1>Coming soon!</h1>
+    <h2 class='glyphicon glyphicon-hourglass'></h2>
+    <p>Trade credits for gift cards to your favorite stores and restaurants.</p>
+  </section>
+</div>
+{%endblock%}

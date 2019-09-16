@@ -275,13 +275,13 @@ def playerOverview(request):
     totalActive = credits.getTotalActiveCredits(playerAccount)
     expiringCredits = credits.totalExpiringCredits(playerAccount)
     expiredCredits = credits.totalExpiredCredits(playerAccount)
-    lastTournament = tournament.getPlayerTournaments(curPlayer)[0].tournament_name
+    #lastTournament = tournament.getPlayerTournaments(curPlayer)[0].tournament_name
     highestPrize = playerResults.getHighestPrize(curPlayer)
     return render(request,'player/playerOverview.html',{
         "totalActive":totalActive,
         "expiringCredits":expiringCredits,
         "expiredCredits":expiredCredits,
-        "lastTournament":lastTournament,
+        #"lastTournament":lastTournament,
         "highestPrize":highestPrize,
     })
 
@@ -291,8 +291,26 @@ def playerCredits(request):
     activeCredits = credits.getActiveCredits(playerAccount)
     expiringCredits = credits.getExpiringCredits(playerAccount)
     expiredCredits = credits.getExpiredCredits(playerAccount)
+    creditsRecieved = transaction.getRecievedTransactions(playerAccount)
+    creditsSpent = transaction.getPayedTransactions(playerAccount)
     return render(request, 'player/playerCredits.html',{
         "activeCredits":activeCredits,
         "expiringCredits":expiringCredits,
-        "expiredCredits":expiredCredits
+        "expiredCredits":expiredCredits,
+        "creditsRecieved":creditsRecieved,
+        "creditsSpent":creditsSpent,
+    })
+
+def playerTournaments(request):
+    curPlayer = request.user.userPlayer
+    tournaments = playerResults.getPlayerResults(curPlayer)
+    return render(request,'player/playerTournaments.html',{
+        "tournaments":tournaments,
+    })
+
+def trade(request):
+    curPlayer = request.user.userPlayer
+    playerAccount = account.getPlayerAccount(curPlayer)
+    return render(request, "player/trade.html",{
+        "playerAccount":playerAccount,
     })

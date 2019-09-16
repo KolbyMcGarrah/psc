@@ -132,11 +132,7 @@ class playerResults (models.Model):
         current.position = pos
         current.save()
     def getPlayerResults(curPlayer):
-        results = []
-        allResults = playerResults.objects.filter(player=curPlayer)
-        for field in allResults:
-            if field.tournament.status == 4:
-                results.append(field)
+        results = playerResults.objects.filter(player=curPlayer, tournament__status=4)
         return results
 
     def getHighestPrize(curPlayer):

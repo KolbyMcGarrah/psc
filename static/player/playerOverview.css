@@ -8,6 +8,12 @@ main{
   height:100vh;
   background-color:#f7f8f9;
 }
+h3{
+  font-size:32px;
+}
+h4{
+  font-size:22px;
+}
 article header{
   background-color:#f7f8f9;
   margin-bottom:22px;
@@ -95,4 +101,8 @@ section a{
 }
 nav .glyphicon{
   padding-left:12px;
+}
+.creditOverview{
+  display:grid;
+  grid-template-columns:33.3% 33.3% 33.3%;
 }

@@ -1,0 +1,56 @@
+{%extends 'base.html'%}
+{% load static %}
+{% block css %}
+  <link rel="stylesheet" type="text/css" href="{% static 'player/playerCredits.css' %}">
+{% endblock %}
+{% block content %}
+<nav>
+  <h1>Actions</h1>
+  <ul>
+    <li><span class="glyphicon glyphicon-home"></span><a href="{% url 'playerOverview' %}">Overview</a></li>
+    <li><span class="glyphicon glyphicon-credit-card"></span><a href="{% url 'playerCredits' %}">Credits</a></li>
+    <li class="active"><span class="glyphicon glyphicon-tree-conifer"></span><a href="{% url 'playerTournaments' %}">Tournaments</a></li>
+    <li><span class="glyphicon glyphicon-tags"></span><a href="{% url 'trade' %}">Trade</a></li>
+    <li><span class="glyphicon glyphicon-user"></span><a>Profile</a></li>
+  </ul>
+</nav>
+<div class="dashboard">
+  <article class="">
+    <header>
+      <h1>Tournaments</h1>
+      <h2>{{user.username}}</h2>
+    </header>
+  </article>
+  <section>
+    <h1>Credits</h1>
+    <table>
+            <thead>
+                <tr>
+                    <th>Number</th>
+                    <th>Tournament</th>
+                    <th>Location</th>
+                    <th>Date</th>
+                    <th>Position</th>
+                    <th>Prize</th>
+                    <th>Division</th>
+                    <th>Flight</th>
+                </tr>
+            </thead>            
+            <tbody>
+                {% for tournament in tournaments %}
+                    <tr>     
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ tournament.tournament.tournament_name }}</td>
+                        <td>{{ tournament.tournament.shop.shop_name }}</td>
+                        <td>{{ tournament.tournament.tournament_date }}</td>
+                        <td>{{ tournamnet.position }}</td>
+                        <td>{{ tournamnet.amount_won }}</td>
+                        <td>{{ tournamnet.division }}</td>
+                        <td>{{ tournamnet.flight }}</td>
+                    </tr>                    
+                {% endfor %}
+            </tbody>
+        </table>
+  </section>
+</div>
+{%endblock%}
