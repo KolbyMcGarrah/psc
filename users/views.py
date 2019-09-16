@@ -150,29 +150,6 @@ def shopActions(request):
             "searchForm":searchForm,
             "events":approvedEvents,
         })
-@login_required
-@user_passes_test(player_test,login_url='/', redirect_field_name=None)
-def playerActions(request):
-    upcomingTournaments = tournament.objects.filter(players=request.user.userPlayer, status=True)
-    previousTournaments = playerResults.getPlayerResults(request.user.userPlayer)
-    playerAccount = account.getAccount(request.user)
-    playerCredits = credits.myCredits(request.user)
-    creditsRecieved = transaction.getRecievedTransactions(playerAccount)
-    creditsSpent = transaction.getPayedTransactions(playerAccount)
-    userInfo = CustomUser.objects.filter(id = request.user.id)
-    if request.method == 'POST':
-        request.session['playerID'] = userInfo.id
-        return redirect('playerEdit')
-    else:
-        return render(request, "player/playerActions.html",{
-            "upcomingTournaments":upcomingTournaments,
-            "previousTournaments":previousTournaments,
-            "creditsRecieved":creditsRecieved,
-            "creditsSpent":creditsSpent,
-            "userInfo":userInfo,
-            "playerAccount":playerAccount,
-            "playerCredits":playerCredits,
-        })
 
 @login_required
 @user_passes_test(shop_test,login_url='/', redirect_field_name=None)
@@ -269,6 +246,8 @@ def playerEdit(request):
     else:
         return redirect('home')
 
+@login_required
+@user_passes_test(player_test,login_url='/', redirect_field_name=None)
 def playerOverview(request):
     curPlayer = request.user.userPlayer
     playerAccount = account.getPlayerAccount(curPlayer)
@@ -285,6 +264,8 @@ def playerOverview(request):
         "highestPrize":highestPrize,
     })
 
+@login_required
+@user_passes_test(player_test,login_url='/', redirect_field_name=None)
 def playerCredits(request):
     curPlayer = request.user.userPlayer
     playerAccount = account.getPlayerAccount(curPlayer)
@@ -300,7 +281,9 @@ def playerCredits(request):
         "creditsRecieved":creditsRecieved,
         "creditsSpent":creditsSpent,
     })
-
+    
+@login_required
+@user_passes_test(player_test,login_url='/', redirect_field_name=None)
 def playerTournaments(request):
     curPlayer = request.user.userPlayer
     tournaments = playerResults.getPlayerResults(curPlayer)
@@ -308,6 +291,8 @@ def playerTournaments(request):
         "tournaments":tournaments,
     })
 
+@login_required
+@user_passes_test(player_test,login_url='/', redirect_field_name=None)
 def trade(request):
     curPlayer = request.user.userPlayer
     playerAccount = account.getPlayerAccount(curPlayer)
@@ -315,8 +300,13 @@ def trade(request):
         "playerAccount":playerAccount,
     })
 
+@login_required
+@user_passes_test(player_test,login_url='/', redirect_field_name=None)
 def playerProfile(request):
     curUser = request.user
     return render(request,"player/playerProfile.html",{
         "curUser":curUser,
     })
+
+def shopOverview(request):
+    return render(request, "proshop/shopOverview.html")

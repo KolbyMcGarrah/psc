@@ -1,0 +1,36 @@
+{%extends 'base.html'%}
+{% load static %}
+{% block css %}
+  <link rel="stylesheet" type="text/css" href="{% static 'proShop/shopOverview.css' %}">
+{% endblock %}
+{% block content %}
+<nav>
+  <h1>Actions</h1>
+  <ul>
+    <li class="active"><span class="glyphicon glyphicon-home"></span><a href="{% url 'shopOverview' %}">Overview</a></li>
+    <li><span class="glyphicon glyphicon-credit-card"></span><a href="#">Redeem Credits</a></li>
+    <li><span class="glyphicon glyphicon-tree-conifer"></span><a href="#">Tournaments</a></li>
+    <li><span class="glyphicon glyphicon-tags"></span><a href="#">Account</a></li>
+    <li><span class="glyphicon glyphicon-user"></span><a href="#">Profile</a></li>
+  </ul>
+</nav>
+<div class="dashboard">
+  <article class="">
+    <header>
+      <h1>Overview</h1>
+      <h2>{{user.username}}</h2>
+    </header>
+  </article>
+  <section>
+      <h1>Tournaments</h1>
+      <h3>Upcomming Tournaments</h3>
+      <a class="btn btn-primary" href="{% url 'registerTournament' %}">Start New Tournament</a>
+  </section>
+  <section>
+        <h1>Tournaments</h1>
+        <h3>Upcomming Tournaments</h3>
+        <a class="btn btn-primary" href="{% url 'registerTournament' %}">Start New Tournament</a>
+    </section>
+  </div>
+</div>
+{% endblock %}
