@@ -7,11 +7,11 @@
 <nav>
   <h1>Actions</h1>
   <ul>
-    <li class="active"><a>Overview</a></li>
-    <li><a>Credits</a></li>
-    <li><a>Tournaments</a></li>
-    <li><a>Trade</a></li>
-    <li><a>Profile</a></li>
+    <li class="active"><span class="glyphicon glyphicon-home"></span><a href="{% url 'playerOverview' %}">Overview</a></li>
+    <li><span class="glyphicon glyphicon-credit-card"></span><a href="{% url 'playerCredits' %}">Credits</a></li>
+    <li><span class="glyphicon glyphicon-tree-conifer"></span><a>Tournaments</a></li>
+    <li><span class="glyphicon glyphicon-gift"></span><a>Trade</a></li>
+    <li><span class="glyphicon glyphicon-user"></span><a>Profile</a></li>
   </ul>
 </nav>
 <div class="dashboard">

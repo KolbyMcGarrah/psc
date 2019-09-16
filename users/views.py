@@ -284,3 +284,15 @@ def playerOverview(request):
         "lastTournament":lastTournament,
         "highestPrize":highestPrize,
     })
+
+def playerCredits(request):
+    curPlayer = request.user.userPlayer
+    playerAccount = account.getPlayerAccount(curPlayer)
+    activeCredits = credits.getActiveCredits(playerAccount)
+    expiringCredits = credits.getExpiringCredits(playerAccount)
+    expiredCredits = credits.getExpiredCredits(playerAccount)
+    return render(request, 'player/playerCredits.html',{
+        "activeCredits":activeCredits,
+        "expiringCredits":expiringCredits,
+        "expiredCredits":expiredCredits
+    })

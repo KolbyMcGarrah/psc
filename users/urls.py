@@ -10,4 +10,5 @@ urlpatterns = [
     path('execHome/', views.execHome, name = 'execHome'),
     path('createPin/', views.createPin, name='createPin'),
     path('playerOverview/', views.playerOverview, name='playerOverview'),
+    path('playerCredits/', views.playerCredits, name='playerCredits'),
 ]

@@ -78,21 +78,19 @@ section td{
   font-size:22px;
   padding-right:22px;
   padding-bottom:22px;
+  border-top:1px black solid;
 }
 section a{
   margin-left:22px;
 }
-.creditSection{
-  display:grid;
-  grid-template-columns: 50% 50%;
-}
-.bottomGrid{
-  display:grid;
-  grid-template-columns: 50% 50%;
-}
-.right{
-  border-left:1px solid black;
+section th{
+  font-size:22px;
+  padding-right:22px;
 }
 nav .glyphicon{
   padding-left:12px;
+}
+.glyphicon-warning-sign{
+  padding-right:2px;
+  color:red;
 }

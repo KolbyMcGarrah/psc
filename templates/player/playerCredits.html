@@ -1,0 +1,67 @@
+{%extends 'base.html'%}
+{% load static %}
+{% block css %}
+  <link rel="stylesheet" type="text/css" href="{% static 'player/playerCredits.css' %}">
+{% endblock %}
+{% block content %}
+<nav>
+  <h1>Actions</h1>
+  <ul>
+    <li><span class="glyphicon glyphicon-home"></span><a href="{% url 'playerOverview' %}">Overview</a></li>
+    <li class="active"><span class="glyphicon glyphicon-credit-card"></span><a href="{% url 'playerCredits' %}">Credits</a></li>
+    <li><span class="glyphicon glyphicon-tree-conifer"></span><a>Tournaments</a></li>
+    <li><span class="glyphicon glyphicon-gift"></span><a>Trade</a></li>
+    <li><span class="glyphicon glyphicon-user"></span><a>Profile</a></li>
+  </ul>
+</nav>
+<div class="dashboard">
+  <article class="">
+    <header>
+      <h1>Credit Breakdown</h1>
+      <h2>{{user.username}}</h2>
+    </header>
+  </article>
+  <section>
+    <h1>Credits</h1>
+      <!-- Populate amount of available credits -->
+      <!-- Populate how many expiring credits -->
+      <!-- Populate how many credits you've let expire -->
+      <table>
+        <tbody>
+          <thead>
+              <tr>
+                  <th>Date Assigned</th>
+                  <th>Amount</th>
+                  <th>Expiration Date</th>
+                  <th>Status</th>
+              </tr>
+          </thead>
+          {% for credit in activeCredits %}
+            <tr>
+              <td>{{ credit.date_assigned }}</td>
+              <td>{{ credit.credit_amount }}</td>
+              <td>{{ credit.expiration_date }}</td>
+              <td>{{ credit.get_status_display }}</td>
+            </tr>
+          {% endfor %}
+          {% for credit in expiringCredits %}
+            <tr>
+              <td><span class="glyphicon glyphicon-alert"></span>{{ credit.date_assigned }}</td>
+              <td>{{ credit.credit_amount }}</td>
+              <td>{{ credit.expiration_date }}</td>
+              <td>{{ credit.get_status_display }}</td>
+            </tr>
+          {% endfor %}
+          {% for credit in expiredCredits %}
+            <tr>
+              <td>{{ credit.date_assigned }}</td>
+              <td>{{ credit.credit_amount }}</td>
+              <td>{{ credit.expiration_date }}</td>
+              <td>{{ credit.get_status_display }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+  </section>
+</div>
+{%endblock%}
