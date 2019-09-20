@@ -26,28 +26,21 @@
     <table>
             <thead>
                 <tr>
-                    <th>Number</th>
                     <th>Tournament</th>
                     <th>Location</th>
                     <th>Date</th>
                     <th>Position</th>
                     <th>Prize</th>
-                    <th>Division</th>
-                    <th>Flight</th>
                 </tr>
-            </thead>            
+            </thead>
             <tbody>
                 {% for tournament in tournaments %}
-                    <tr>     
-                        <td>{{ forloop.counter }}</td>
+                    <tr>
                         <td>{{ tournament.tournament.tournament_name }}</td>
                         <td>{{ tournament.tournament.shop.shop_name }}</td>
                         <td>{{ tournament.tournament.tournament_date }}</td>
                         <td>{{ tournament.position }}</td>
                         <td>{{ tournament.amount_won }}</td>
-                        <td>{{ tournament.get_division_display }}</td>
-                        <td>{{ tournament.get_flight_display }}</td>
-                    </tr>                    
                 {% endfor %}
             </tbody>
         </table>

@@ -25,23 +25,30 @@
   <section>
     <h2>Tournaments</h2>
     <ul>
-      <li><p>Number of tournaments</p></li>
-      <li><p>Current Tournament</p></li>
-      <li><p>Resume Progress</p></li>
-      <li><p></p></li>
-      <li></li>
+      <li><label>Tournaments Hosted</label></li>
+      <li><label>Last Tournament</label></li>
+      <li><label>Resume Progress</label></li>
+      <li><label>Start New Tournament</label></li>
     </ul>
   </section>
   <section>
         <h2>Credits</h2>
         <ul>
-          <li><label>Total Distributed</label><p>300</p></li>
-          <li><label>Total Redeemed</label></li>
-          <li><label>Total Unused</label></li>
-          <li><p></p></li>
-          <li></li>
+          <li><label>Total Given</label><p>{{totalGiven}}</p></li>
+          <li><label>Total Redeemed</label><p>{{totalRedeemed}}</p></li>
+          <li><label>Expired Credits</label><p></p></li>
+          <li><label>Credits about to expire</label></li>
         </ul>
     </section>
+    <section>
+          <h2>Shop</h2>
+          <ul>
+            <li><label>Last Transaction</label><p>300</p></li>
+            <li><label>Avg Sale</label></li>
+            <li><label>Top Customer</label></li>
+            <li><a href="#" class='btn btn-success'>Redeem Credits</a></li>
+          </ul>
+      </section>
   </div>
 </div>
 {% endblock %}
