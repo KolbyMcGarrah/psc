@@ -1,2 +1,2 @@
-web: gunicorn psc/wsgi.py --log-file
+web: gunicorn psc/wsgi.py
 release: python manage.py migrate
