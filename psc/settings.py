@@ -14,6 +14,7 @@ import os
 import dj_database_url
 import dotenv
 import django_heroku
+from django.core.wsgi import get_wsgi_application
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -94,7 +95,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'psc.wsgi.application'
+WSGI_APPLICATION = os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'psc.settings')
 
 
 # Database
