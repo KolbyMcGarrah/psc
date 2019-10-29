@@ -1,0 +1,47 @@
+{%extends 'base.html'%}
+{% load static %}
+{% block css %}
+  <link rel="stylesheet" type="text/css" href="{% static 'proShop/shopOverview.css' %}">
+{% endblock %}
+{% block content %}
+<nav>
+  <h1>Actions</h1>
+  <ul>
+    <li class="active"><span class="glyphicon glyphicon-home"></span><a href="{% url 'shopOverview' %}">Overview</a></li>
+    <li><span class="glyphicon glyphicon-credit-card"></span><a href="#">Redeem Credits</a></li>
+    <li><span class="glyphicon glyphicon-tree-conifer"></span><a href="#">Tournaments</a></li>
+    <li><span class="glyphicon glyphicon-tags"></span><a href="#">Account</a></li>
+    <li><span class="glyphicon glyphicon-user"></span><a href="#">Profile</a></li>
+  </ul>
+</nav>
+<div class="dashboard">
+  <article class="">
+    <header>
+      <h1>Overview</h1>
+      <h2>{{user.username}}</h2>
+    </header>
+  </article>
+  <div class="stats">
+  <section>
+    <h2>Tournaments</h2>
+    <ul>
+      <li><p>Number of tournaments</p></li>
+      <li><p>Current Tournament</p></li>
+      <li><p>Resume Progress</p></li>
+      <li><p></p></li>
+      <li></li>
+    </ul>
+  </section>
+  <section>
+        <h2>Credits</h2>
+        <ul>
+          <li><label>Total Distributed</label><p>300</p></li>
+          <li><label>Total Redeemed</label></li>
+          <li><label>Total Unused</label></li>
+          <li><p></p></li>
+          <li></li>
+        </ul>
+    </section>
+  </div>
+</div>
+{% endblock %}
